@@ -36,10 +36,13 @@ describe('QuizConfig', () => {
 
     it('calls WaniKani with correct form arguments', async () => {
         when(WaniKaniApi.fetchQuizItems).mockImplementation(() => Promise.resolve());
+        await userEvent.click(screen.getByRole('textbox', { name: 'API Key' }));
+        await userEvent.paste('apiKey');
         await userEvent.click(screen.getByRole('checkbox', { name: 'Radicals' }));
         await userEvent.click(screen.getByRole('checkbox', { name: 'Vocabulary' }));
         await userEvent.click(screen.getByRole('button', { name: 'Generate Quiz' }));
         expect(fetchQuizItemsSpy).toBeCalledWith({
+            apiKey: 'apiKey',
             radicals: true,
             kanji: false,
             vocabulary: true,
