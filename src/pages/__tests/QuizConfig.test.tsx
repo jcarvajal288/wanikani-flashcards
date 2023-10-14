@@ -34,6 +34,10 @@ describe('QuizConfig', () => {
         expect(screen.getByRole('button', { name: 'Generate Quiz' }));
     });
 
+    it('shows Update Wanikani Data button', () => {
+        expect(screen.getByRole('button', { name: /Update Wanikani Data \(do not abuse\)/i }));
+    });
+
     it('calls WaniKani with correct form arguments', async () => {
         when(WaniKaniApi.fetchQuizItems).mockImplementation(() => Promise.resolve());
         await userEvent.click(screen.getByRole('textbox', { name: 'API Key' }));

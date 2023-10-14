@@ -31,47 +31,61 @@ export const QuizConfig = () => {
 
     return (
         <>
-            <Typography variant='h2'>Configure Quiz</Typography>
-            <form onSubmit={(e) => handleSubmit(e)}>
+            <Stack
+                height='100%'
+                bgcolor='pink'
+                justifyContent='space-between'
+            >
                 <Stack>
-                    <TextField
-                        id='api-key-input'
-                        label='API Key'
-                        variant='outlined'
-                        onChange={(e) => setFormValue({ apiKey: e.target.value })}
-                    />
-                    <Paper>
-                        <Stack direction='column'>
-                            <Typography variant='h5'>Item Types</Typography>
-                            <FormGroup>
-                                <FormControlLabel
-                                    control={
-                                        <Checkbox onChange={(e) => setFormValue({ radicals: e.target.checked })} />
-                                    }
-                                    label={'Radicals'}
-                                />
-                                <FormControlLabel
-                                    control={<Checkbox onChange={(e) => setFormValue({ kanji: e.target.checked })} />}
-                                    label={'Kanji'}
-                                />
-                                <FormControlLabel
-                                    control={
-                                        <Checkbox onChange={(e) => setFormValue({ vocabulary: e.target.checked })} />
-                                    }
-                                    label={'Vocabulary'}
-                                />
-                            </FormGroup>
+                    <Typography variant='h2'>Configure Quiz</Typography>
+                    <form onSubmit={(e) => handleSubmit(e)}>
+                        <Stack>
+                            <TextField
+                                id='api-key-input'
+                                label='API Key'
+                                variant='outlined'
+                                onChange={(e) => setFormValue({ apiKey: e.target.value })}
+                            />
+                            <Paper>
+                                <Stack direction='column'>
+                                    <Typography variant='h5'>Item Types</Typography>
+                                    <FormGroup>
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
+                                                    onChange={(e) => setFormValue({ radicals: e.target.checked })}
+                                                />
+                                            }
+                                            label={'Radicals'}
+                                        />
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox onChange={(e) => setFormValue({ kanji: e.target.checked })} />
+                                            }
+                                            label={'Kanji'}
+                                        />
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
+                                                    onChange={(e) => setFormValue({ vocabulary: e.target.checked })}
+                                                />
+                                            }
+                                            label={'Vocabulary'}
+                                        />
+                                    </FormGroup>
+                                </Stack>
+                            </Paper>
+                            <Button
+                                variant='contained'
+                                type='submit'
+                            >
+                                Generate Quiz
+                            </Button>
                         </Stack>
-                    </Paper>
-                    <Button
-                        variant='contained'
-                        type='submit'
-                    >
-                        Generate Quiz
-                    </Button>
+                    </form>
                 </Stack>
-            </form>
-            <Typography>{JSON.stringify(formData)}</Typography>
+                <Button>Update WaniKani data (do not abuse)</Button>
+            </Stack>
         </>
     );
 };
