@@ -1,20 +1,21 @@
 import { Button, Checkbox, FormControlLabel, FormGroup, Paper, Stack, TextField, Typography } from '@mui/material';
 import { FormEvent, useState } from 'react';
+import { fetchQuizItems } from '../api/waniKaniApi.ts';
 
-type FormData = {
+export type QuizConfigFormData = {
     radicals: boolean;
     kanji: boolean;
     vocabulary: boolean;
 };
 
 export const QuizConfig = () => {
-    const [formData, setFormData] = useState<FormData>({
+    const [formData, setFormData] = useState<QuizConfigFormData>({
         radicals: false,
         kanji: false,
         vocabulary: false,
     });
 
-    const setFormValue = (field: Partial<FormData>) => {
+    const setFormValue = (field: Partial<QuizConfigFormData>) => {
         setFormData({
             ...formData,
             ...field,
@@ -22,8 +23,8 @@ export const QuizConfig = () => {
     };
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-        console.log(JSON.stringify(formData));
         e.preventDefault();
+        fetchQuizItems(formData);
     };
 
     return (
@@ -71,3 +72,5 @@ export const QuizConfig = () => {
         </>
     );
 };
+
+export default QuizConfig;
