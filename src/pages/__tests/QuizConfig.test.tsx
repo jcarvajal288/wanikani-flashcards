@@ -10,6 +10,7 @@ vi.mock('../../api/waniKaniApi.ts');
 
 describe('QuizConfig', () => {
     const fetchQuizItemsSpy = vi.spyOn(WaniKaniApi, 'fetchQuizItems');
+    const fetchWanikaniSubjectDataSpy = vi.spyOn(WaniKaniApi, 'fetchWaniKaniSubjectData');
 
     beforeEach(() => {
         render(<QuizConfig />);
@@ -34,8 +35,9 @@ describe('QuizConfig', () => {
         expect(screen.getByRole('button', { name: 'Generate Quiz' }));
     });
 
-    it('shows Update Wanikani Data button', () => {
-        expect(screen.getByRole('button', { name: /Update Wanikani Data \(do not abuse\)/i }));
+    it('triggers database refresh when clicking Update Wanikani Data button', async () => {
+        await userEvent.click(screen.getByRole('button', { name: /Update Wanikani Data/i }));
+        expect(fetchWanikaniSubjectDataSpy).toHaveBeenCalled();
     });
 
     it('calls WaniKani with correct form arguments', async () => {

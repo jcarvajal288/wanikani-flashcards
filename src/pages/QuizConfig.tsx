@@ -1,6 +1,6 @@
 import { Button, Checkbox, FormControlLabel, FormGroup, Paper, Stack, TextField, Typography } from '@mui/material';
 import { FormEvent, useState } from 'react';
-import { fetchQuizItems } from '../api/waniKaniApi.ts';
+import { fetchQuizItems, fetchWaniKaniSubjectData } from '../api/waniKaniApi.ts';
 
 export type QuizConfigFormData = {
     apiKey: string;
@@ -32,8 +32,7 @@ export const QuizConfig = () => {
     return (
         <>
             <Stack
-                height='100%'
-                bgcolor='pink'
+                height='95vh'
                 justifyContent='space-between'
             >
                 <Stack>
@@ -84,7 +83,7 @@ export const QuizConfig = () => {
                         </Stack>
                     </form>
                 </Stack>
-                <Button>Update WaniKani data (do not abuse)</Button>
+                <Button onClick={fetchWaniKaniSubjectData}>Update WaniKani data</Button>
             </Stack>
         </>
     );
