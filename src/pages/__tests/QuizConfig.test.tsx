@@ -1,7 +1,7 @@
 /** @jest-environment jsdom */
-import { render, screen } from '@testing-library/react';
+import { render, screen, cleanup } from '@testing-library/react';
 import { QuizConfig } from '../QuizConfig.tsx';
-import { beforeEach } from 'vitest';
+import { beforeEach, vitest } from 'vitest';
 import * as WaniKaniApi from '../../api/waniKaniApi.ts';
 import { userEvent } from '@testing-library/user-event';
 import { when } from 'jest-when';
@@ -35,9 +35,18 @@ describe('QuizConfig', () => {
         expect(screen.getByRole('button', { name: 'Generate Quiz' }));
     });
 
-    it('triggers database refresh when clicking Update Wanikani Data button', async () => {
+    it('alerts the user when they press the Update Wanikani Data button without inputting their API Key', async () => {
+        vitest.spyOn(window, 'alert').mockImplementation(() => {});
         await userEvent.click(screen.getByRole('button', { name: /Update Wanikani Data/i }));
-        expect(fetchWanikaniSubjectDataSpy).toHaveBeenCalled();
+        expect(fetchWanikaniSubjectDataSpy).not.toHaveBeenCalled();
+        expect(window.alert).toBeCalledWith('You must enter your API Key before performing this action.');
+    });
+
+    it('triggers database refresh when clicking Update Wanikani Data button', async () => {
+        await userEvent.click(screen.getByRole('textbox', { name: 'API Key' }));
+        await userEvent.paste('apiKey');
+        await userEvent.click(screen.getByRole('button', { name: /Update Wanikani Data/i }));
+        expect(fetchWanikaniSubjectDataSpy).toHaveBeenCalledWith('apiKey');
     });
 
     it('calls WaniKani with correct form arguments', async () => {

@@ -29,6 +29,14 @@ export const QuizConfig = () => {
         fetchQuizItems(formData);
     };
 
+    const handleDatabaseRefresh = () => {
+        if (formData.apiKey === '') {
+            alert('You must enter your API Key before performing this action.');
+        } else {
+            fetchWaniKaniSubjectData(formData.apiKey);
+        }
+    };
+
     return (
         <>
             <Stack
@@ -83,7 +91,7 @@ export const QuizConfig = () => {
                         </Stack>
                     </form>
                 </Stack>
-                <Button onClick={fetchWaniKaniSubjectData}>Update WaniKani data</Button>
+                <Button onClick={handleDatabaseRefresh}>Update WaniKani data</Button>
             </Stack>
         </>
     );
