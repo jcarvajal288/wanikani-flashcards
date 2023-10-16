@@ -7,13 +7,15 @@ export const fetchQuizItems = (quizConfig: QuizConfigFormData) => {
     console.log(JSON.stringify(quizConfig));
 };
 
-export const fetchWaniKaniSubjectData = (apiKey: string) => {
+export const fetchWaniKaniSubjectData = async (apiKey: string) => {
     console.log('fetching WaniKani subject data');
-    axios
+    return await axios
         .get(`${waniKaniApiUrl}/subjects`, {
             headers: { Authorization: `Bearer ${apiKey}` },
         })
         .then((response) => {
-            console.log(`Number of subjects fetched: ${response.data.data.length}`);
+            const subjects = response.data.data;
+            console.log(`Number of subjects fetched: ${subjects.length}`);
+            return subjects;
         });
 };
