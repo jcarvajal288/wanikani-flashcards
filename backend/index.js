@@ -18,10 +18,10 @@ app.use(cors());
 app.post('/fillDatabase', jsonParser, async (request, response) => {
     const subjects = request.body;
     console.log(`Filling database with ${subjects.length} subjects`);
-    const database = databaseClient.db('insertDB');
+    const database = databaseClient.db('wanikani_db');
     const subjectsTable = database.collection('subjects');
-    const result = await subjectsTable.insertOne(subjects[0]);
-    console.log('inserted id ' + result.insertedId);
+    const result = await subjectsTable.insertMany(subjects);
+    console.log('inserted ' + result.insertedCount + ' subjects');
 });
 
 app.listen(PORT, () => {
