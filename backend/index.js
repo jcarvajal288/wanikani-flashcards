@@ -8,7 +8,7 @@ import cors from 'cors';
 const PORT = process.env.PORT || 3001;
 
 const app = express();
-const jsonParser = bodyParser.json({ limit: '2mb' });
+const jsonParser = bodyParser.json({ limit: '4mb' });
 
 const databaseUri = 'mongodb://root:example@localhost:27017/?authMechanism=DEFAULT';
 const databaseClient = new MongoClient(databaseUri);

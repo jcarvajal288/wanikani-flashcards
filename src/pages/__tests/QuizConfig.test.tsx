@@ -3,7 +3,6 @@ import { render, screen } from '@testing-library/react';
 import { QuizConfig } from '../QuizConfig.tsx';
 import { beforeEach, vitest } from 'vitest';
 import * as WaniKaniApi from '../../api/waniKaniApi.ts';
-import * as BackendApi from '../../api/backendApi.ts';
 import { userEvent } from '@testing-library/user-event';
 import { when } from 'jest-when';
 
@@ -12,8 +11,7 @@ vi.mock('../../api/backendApi.ts');
 
 describe('QuizConfig', () => {
     const fetchQuizItemsSpy = vi.spyOn(WaniKaniApi, 'fetchQuizItems');
-    const fetchWanikaniSubjectDataSpy = vi.spyOn(WaniKaniApi, 'fetchWaniKaniSubjectData');
-    const postSubjectsSpy = vi.spyOn(BackendApi, 'postSubjects');
+    const fetchWanikaniSubjectDataSpy = vi.spyOn(WaniKaniApi, 'fetchAndPostWaniKaniSubjectData');
 
     beforeEach(() => {
         render(<QuizConfig />);
@@ -50,7 +48,6 @@ describe('QuizConfig', () => {
         await userEvent.paste('apiKey');
         await userEvent.click(screen.getByRole('button', { name: /Update Wanikani Data/i }));
         expect(fetchWanikaniSubjectDataSpy).toHaveBeenCalledWith('apiKey');
-        expect(postSubjectsSpy).toHaveBeenCalled();
     });
 
     it('calls WaniKani with correct form arguments', async () => {

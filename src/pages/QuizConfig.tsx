@@ -1,7 +1,6 @@
 import { Button, Checkbox, FormControlLabel, FormGroup, Paper, Stack, TextField, Typography } from '@mui/material';
 import { FormEvent, useState } from 'react';
-import { fetchQuizItems, fetchWaniKaniSubjectData } from '../api/waniKaniApi.ts';
-import { postSubjects } from '../api/backendApi.ts';
+import { fetchAndPostWaniKaniSubjectData, fetchQuizItems } from '../api/waniKaniApi.ts';
 
 export type QuizConfigFormData = {
     apiKey: string;
@@ -34,8 +33,7 @@ export const QuizConfig = () => {
         if (formData.apiKey === '') {
             alert('You must enter your API Key before performing this action.');
         } else {
-            const subjects = await fetchWaniKaniSubjectData(formData.apiKey);
-            postSubjects(subjects);
+            await fetchAndPostWaniKaniSubjectData(formData.apiKey);
         }
     };
 
