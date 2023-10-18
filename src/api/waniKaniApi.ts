@@ -15,13 +15,13 @@ export const fetchAndPostWaniKaniSubjectData = async (apiKey: string): Promise<v
             .get(url, {
                 headers: { Authorization: `Bearer ${apiKey}` },
             })
-            .then((response) => {
+            .then(async (response) => {
                 const subjects = response.data.data;
                 const nextUrl = response.data.pages.next_url;
                 console.log(`Number of subjects fetched: ${subjects.length}`);
-                postSubjects(subjects);
+                await postSubjects(subjects);
                 if (nextUrl) {
-                    fetchAndPost(apiKey, nextUrl);
+                    await fetchAndPost(apiKey, nextUrl);
                 }
             });
     };
