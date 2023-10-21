@@ -4,8 +4,27 @@ import { postSubjects } from './backendApi.ts';
 
 const waniKaniApiUrl = 'https://api.wanikani.com/v2';
 
-export const fetchQuizItems = (quizConfig: QuizConfigFormData) => {
-    console.log(JSON.stringify(quizConfig));
+const buildHeaders = (quizConfig: QuizConfigFormData) => {
+    return {
+        headers: { Authorization: `Bearer ${quizConfig.apiKey}` },
+    };
+};
+
+const constructQueryString = (qc: QuizConfigFormData): string => {
+    const subjectTypes = (qc: QuizConfigFormData): string => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        const subjectKeys = Object.keys(qc.subjectTypes).filter((key) => qc.subjectTypes[key]);
+        if (subjectKeys.length === 0) return '';
+        const initialString = subjectKeys.join(',');
+        return `subject_types=${initialString}` + (qc.subjectTypes.vocabulary ? ',kana_vocabulary' : '');
+    };
+    return `${waniKaniApiUrl}/assignments?${subjectTypes(qc)}`;
+};
+
+export const fetchQuizItems = async (quizConfig: QuizConfigFormData) => {
+    const queryString = constructQueryString(quizConfig);
+    return await axios.get(queryString, buildHeaders(quizConfig));
 };
 
 export const fetchAndPostWaniKaniSubjectData = async (apiKey: string): Promise<void> => {

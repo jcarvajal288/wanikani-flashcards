@@ -4,7 +4,11 @@ import { fetchAndPostWaniKaniSubjectData, fetchQuizItems } from '../api/waniKani
 
 export type QuizConfigFormData = {
     apiKey: string;
-    radicals: boolean;
+    subjectTypes: SubjectTypes;
+};
+
+export type SubjectTypes = {
+    radical: boolean;
     kanji: boolean;
     vocabulary: boolean;
 };
@@ -12,15 +16,27 @@ export type QuizConfigFormData = {
 export const QuizConfig = () => {
     const [formData, setFormData] = useState<QuizConfigFormData>({
         apiKey: '',
-        radicals: false,
-        kanji: false,
-        vocabulary: false,
+        subjectTypes: {
+            radical: false,
+            kanji: false,
+            vocabulary: false,
+        },
     });
 
     const setFormValue = (field: Partial<QuizConfigFormData>) => {
         setFormData({
             ...formData,
             ...field,
+        });
+    };
+
+    const setSubjectType = (field: Partial<SubjectTypes>) => {
+        setFormData({
+            ...formData,
+            subjectTypes: {
+                ...formData.subjectTypes,
+                ...field,
+            },
         });
     };
 
@@ -60,21 +76,23 @@ export const QuizConfig = () => {
                                         <FormControlLabel
                                             control={
                                                 <Checkbox
-                                                    onChange={(e) => setFormValue({ radicals: e.target.checked })}
+                                                    onChange={(e) => setSubjectType({ radical: e.target.checked })}
                                                 />
                                             }
                                             label={'Radicals'}
                                         />
                                         <FormControlLabel
                                             control={
-                                                <Checkbox onChange={(e) => setFormValue({ kanji: e.target.checked })} />
+                                                <Checkbox
+                                                    onChange={(e) => setSubjectType({ kanji: e.target.checked })}
+                                                />
                                             }
                                             label={'Kanji'}
                                         />
                                         <FormControlLabel
                                             control={
                                                 <Checkbox
-                                                    onChange={(e) => setFormValue({ vocabulary: e.target.checked })}
+                                                    onChange={(e) => setSubjectType({ vocabulary: e.target.checked })}
                                                 />
                                             }
                                             label={'Vocabulary'}
