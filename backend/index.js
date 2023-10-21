@@ -20,8 +20,8 @@ app.post('/fillDatabase', jsonParser, async (request, response) => {
     console.log(`Filling database with ${subjects.length} subjects`);
     const database = databaseClient.db('wanikani_db');
     const subjectsTable = database.collection('subjects');
-    const result = await subjectsTable.insertMany(subjects);
-    console.log('inserted ' + result.insertedCount + ' subjects');
+    await subjectsTable.insertMany(subjects);
+    response.sendStatus(201);
 });
 
 app.listen(PORT, () => {
