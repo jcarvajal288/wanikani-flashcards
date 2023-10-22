@@ -1,6 +1,7 @@
 import { Button, Checkbox, FormControlLabel, FormGroup, Paper, Stack, TextField, Typography } from '@mui/material';
 import { FormEvent, useState } from 'react';
 import { fetchAndPostWaniKaniSubjectData, fetchQuizItems } from '../api/waniKaniApi.ts';
+import { ItemTypes } from './ItemTypes.tsx';
 
 export type QuizConfigFormData = {
     apiKey: string;
@@ -106,39 +107,11 @@ export const QuizConfig = () => {
                                 onChange={(e) => setFormValue({ apiKey: e.target.value })}
                             />
                             <Stack direction='row'>
-                                <Paper>
-                                    <Stack direction='column'>
-                                        <Typography variant='h5'>Item Types</Typography>
-                                        <FormGroup>
-                                            <FormControlLabel
-                                                control={
-                                                    <Checkbox
-                                                        onChange={(e) => setSubjectType({ radical: e.target.checked })}
-                                                    />
-                                                }
-                                                label={'Radicals'}
-                                            />
-                                            <FormControlLabel
-                                                control={
-                                                    <Checkbox
-                                                        onChange={(e) => setSubjectType({ kanji: e.target.checked })}
-                                                    />
-                                                }
-                                                label={'Kanji'}
-                                            />
-                                            <FormControlLabel
-                                                control={
-                                                    <Checkbox
-                                                        onChange={(e) =>
-                                                            setSubjectType({ vocabulary: e.target.checked })
-                                                        }
-                                                    />
-                                                }
-                                                label={'Vocabulary'}
-                                            />
-                                        </FormGroup>
-                                    </Stack>
-                                </Paper>
+                                <ItemTypes
+                                    toggleRadical={(e) => setSubjectType({ radical: e.target.checked })}
+                                    toggleKanji={(e) => setSubjectType({ kanji: e.target.checked })}
+                                    toggleVocabulary={(e) => setSubjectType({ vocabulary: e.target.checked })}
+                                />
                                 <Paper>
                                     <Stack direction='column'>
                                         <Typography variant='h5'>SRS Levels</Typography>
