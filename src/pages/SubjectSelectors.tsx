@@ -1,13 +1,19 @@
 import { Checkbox, FormControlLabel, FormGroup, Paper, Stack, Typography } from '@mui/material';
 import { ChangeEvent } from 'react';
 
+export type SubjectTypes = {
+    radical: boolean;
+    kanji: boolean;
+    vocabulary: boolean;
+};
+
 interface ItemTypesParams {
     toggleRadical: (e: ChangeEvent<HTMLInputElement>) => void;
     toggleKanji: (e: ChangeEvent<HTMLInputElement>) => void;
     toggleVocabulary: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
-export const ItemTypes = (props: ItemTypesParams) => (
+export const SubjectSelectors = (props: ItemTypesParams) => (
     <Paper>
         <Stack direction='column'>
             <Typography variant='h5'>Item Types</Typography>

@@ -1,31 +1,13 @@
-import { Button, Checkbox, FormControlLabel, FormGroup, Paper, Stack, TextField, Typography } from '@mui/material';
+import { Button, Stack, TextField, Typography } from '@mui/material';
 import { FormEvent, useState } from 'react';
 import { fetchAndPostWaniKaniSubjectData, fetchQuizItems } from '../api/waniKaniApi.ts';
-import { ItemTypes } from './ItemTypes.tsx';
+import { SubjectSelectors, SubjectTypes } from './SubjectSelectors.tsx';
+import { SrsLevels, SrsSelectors } from './SrsSelectors.tsx';
 
 export type QuizConfigFormData = {
     apiKey: string;
     subjectTypes: SubjectTypes;
     srsLevels: SrsLevels;
-};
-
-export type SubjectTypes = {
-    radical: boolean;
-    kanji: boolean;
-    vocabulary: boolean;
-};
-
-export type SrsLevels = {
-    apprentice_1: boolean;
-    apprentice_2: boolean;
-    apprentice_3: boolean;
-    apprentice_4: boolean;
-    apprentice_5: boolean;
-    guru_1: boolean;
-    guru_2: boolean;
-    master: boolean;
-    enlightened: boolean;
-    burned: boolean;
 };
 
 export const QuizConfig = () => {
@@ -107,108 +89,23 @@ export const QuizConfig = () => {
                                 onChange={(e) => setFormValue({ apiKey: e.target.value })}
                             />
                             <Stack direction='row'>
-                                <ItemTypes
+                                <SubjectSelectors
                                     toggleRadical={(e) => setSubjectType({ radical: e.target.checked })}
                                     toggleKanji={(e) => setSubjectType({ kanji: e.target.checked })}
                                     toggleVocabulary={(e) => setSubjectType({ vocabulary: e.target.checked })}
                                 />
-                                <Paper>
-                                    <Stack direction='column'>
-                                        <Typography variant='h5'>SRS Levels</Typography>
-                                        <FormGroup>
-                                            <FormControlLabel
-                                                control={
-                                                    <Checkbox
-                                                        onChange={(e) =>
-                                                            setSrsLevel({ apprentice_1: e.target.checked })
-                                                        }
-                                                    />
-                                                }
-                                                label={'Apprentice 1'}
-                                            />
-                                            <FormControlLabel
-                                                control={
-                                                    <Checkbox
-                                                        onChange={(e) =>
-                                                            setSrsLevel({ apprentice_2: e.target.checked })
-                                                        }
-                                                    />
-                                                }
-                                                label={'Apprentice 2'}
-                                            />
-                                            <FormControlLabel
-                                                control={
-                                                    <Checkbox
-                                                        onChange={(e) =>
-                                                            setSrsLevel({ apprentice_3: e.target.checked })
-                                                        }
-                                                    />
-                                                }
-                                                label={'Apprentice 3'}
-                                            />
-                                            <FormControlLabel
-                                                control={
-                                                    <Checkbox
-                                                        onChange={(e) =>
-                                                            setSrsLevel({ apprentice_4: e.target.checked })
-                                                        }
-                                                    />
-                                                }
-                                                label={'Apprentice 4'}
-                                            />
-                                            <FormControlLabel
-                                                control={
-                                                    <Checkbox
-                                                        onChange={(e) =>
-                                                            setSrsLevel({ apprentice_5: e.target.checked })
-                                                        }
-                                                    />
-                                                }
-                                                label={'Apprentice 5'}
-                                            />
-                                            <FormControlLabel
-                                                control={
-                                                    <Checkbox
-                                                        onChange={(e) => setSrsLevel({ guru_1: e.target.checked })}
-                                                    />
-                                                }
-                                                label={'Guru 1'}
-                                            />
-                                            <FormControlLabel
-                                                control={
-                                                    <Checkbox
-                                                        onChange={(e) => setSrsLevel({ guru_2: e.target.checked })}
-                                                    />
-                                                }
-                                                label={'Guru 2'}
-                                            />
-                                            <FormControlLabel
-                                                control={
-                                                    <Checkbox
-                                                        onChange={(e) => setSrsLevel({ master: e.target.checked })}
-                                                    />
-                                                }
-                                                label={'Master'}
-                                            />
-                                            <FormControlLabel
-                                                control={
-                                                    <Checkbox
-                                                        onChange={(e) => setSrsLevel({ enlightened: e.target.checked })}
-                                                    />
-                                                }
-                                                label={'Enlightened'}
-                                            />
-                                            <FormControlLabel
-                                                control={
-                                                    <Checkbox
-                                                        onChange={(e) => setSrsLevel({ burned: e.target.checked })}
-                                                    />
-                                                }
-                                                label={'Burned'}
-                                            />
-                                        </FormGroup>
-                                    </Stack>
-                                </Paper>
+                                <SrsSelectors
+                                    toggleApp1={(e) => setSrsLevel({ apprentice_1: e.target.checked })}
+                                    toggleApp2={(e) => setSrsLevel({ apprentice_2: e.target.checked })}
+                                    toggleApp3={(e) => setSrsLevel({ apprentice_3: e.target.checked })}
+                                    toggleApp4={(e) => setSrsLevel({ apprentice_4: e.target.checked })}
+                                    toggleApp5={(e) => setSrsLevel({ apprentice_5: e.target.checked })}
+                                    toggleGuru1={(e) => setSrsLevel({ guru_1: e.target.checked })}
+                                    toggleGuru2={(e) => setSrsLevel({ guru_2: e.target.checked })}
+                                    toggleMaster={(e) => setSrsLevel({ master: e.target.checked })}
+                                    toggleEnlightened={(e) => setSrsLevel({ enlightened: e.target.checked })}
+                                    toggleBurned={(e) => setSrsLevel({ burned: e.target.checked })}
+                                />
                             </Stack>
                             <Button
                                 variant='contained'
