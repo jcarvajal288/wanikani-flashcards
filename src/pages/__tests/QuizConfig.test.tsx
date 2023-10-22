@@ -7,7 +7,6 @@ import { userEvent } from '@testing-library/user-event';
 import { when } from 'jest-when';
 
 vi.mock('../../api/waniKaniApi.ts');
-vi.mock('../../api/backendApi.ts');
 
 describe('QuizConfig', () => {
     const fetchQuizItemsSpy = vi.spyOn(WaniKaniApi, 'fetchQuizItems');
@@ -59,9 +58,11 @@ describe('QuizConfig', () => {
         await userEvent.click(screen.getByRole('button', { name: 'Generate Quiz' }));
         expect(fetchQuizItemsSpy).toBeCalledWith({
             apiKey: 'apiKey',
-            radicals: true,
-            kanji: false,
-            vocabulary: true,
+            subjectTypes: {
+                radical: true,
+                kanji: false,
+                vocabulary: true,
+            },
         });
     });
 });

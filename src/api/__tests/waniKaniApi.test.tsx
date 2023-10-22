@@ -1,14 +1,17 @@
 import { expect } from 'vitest';
 import { QuizConfigFormData } from '../../pages/QuizConfig.tsx';
-import { fetchQuizItems } from '../waniKaniApi.ts';
+import { fetchAndPostWaniKaniSubjectData, fetchQuizItems } from '../waniKaniApi.ts';
 import axios from 'axios';
+import * as BackendApi from '../backendApi.ts';
 
 vitest.mock('axios');
+vitest.mock('../backendApi.ts');
 
 describe('WaniKani API', () => {
-    describe('can construct a query string', () => {
-        const axiosGetSpy = vi.spyOn(axios, 'get');
+    const postSubjectsSpy = vi.spyOn(BackendApi, 'postSubjects');
+    const axiosGetSpy = vi.spyOn(axios, 'get');
 
+    describe('can construct a query string', () => {
         const baseQueryConfig: QuizConfigFormData = {
             apiKey: 'apiKey',
             subjectTypes: {
@@ -22,7 +25,7 @@ describe('WaniKani API', () => {
             headers: { Authorization: 'Bearer apiKey' },
         };
 
-        it('for kanji', async () => {
+        it('for kanji', () => {
             const quizConfig: QuizConfigFormData = {
                 ...baseQueryConfig,
                 subjectTypes: {
@@ -52,5 +55,30 @@ describe('WaniKani API', () => {
                 headers,
             );
         });
+    });
+
+    it('can fetch WaniKani subjects and follow the next_url link', async () => {
+        axiosGetSpy.mockResolvedValueOnce({
+            data: {
+                pages: {
+                    next_url: 'next-url',
+                },
+            },
+        });
+        axiosGetSpy.mockResolvedValue({
+            data: {
+                pages: {
+                    next_url: null,
+                },
+            },
+        });
+        const headers = {
+            headers: { Authorization: 'Bearer apiKey' },
+        };
+        await fetchAndPostWaniKaniSubjectData('apiKey');
+        postSubjectsSpy.mockImplementation(() => Promise.resolve());
+        expect(axiosGetSpy).toHaveBeenCalledWith('https://api.wanikani.com/v2/subjects', headers);
+        expect(axiosGetSpy).toHaveBeenCalledWith('next-url', headers);
+        expect(postSubjectsSpy).toHaveBeenCalledTimes(2);
     });
 });

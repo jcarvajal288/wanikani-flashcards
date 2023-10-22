@@ -29,17 +29,18 @@ export const fetchQuizItems = async (quizConfig: QuizConfigFormData) => {
 
 export const fetchAndPostWaniKaniSubjectData = async (apiKey: string): Promise<void> => {
     const fetchAndPost = async (apiKey: string, url: string) => {
-        console.log(`GET: ${url}`);
         await axios
             .get(url, {
                 headers: { Authorization: `Bearer ${apiKey}` },
             })
             .then(async (response) => {
+                console.log(url);
                 const subjects = response.data.data;
                 const nextUrl = response.data.pages.next_url;
-                console.log(`Number of subjects fetched: ${subjects.length}`);
+                console.log(nextUrl);
                 await postSubjects(subjects);
                 if (nextUrl) {
+                    console.log('in next url');
                     await fetchAndPost(apiKey, nextUrl);
                 }
             });
