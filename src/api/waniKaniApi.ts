@@ -34,10 +34,8 @@ export const fetchAndPostWaniKaniSubjectData = async (apiKey: string): Promise<v
                 headers: { Authorization: `Bearer ${apiKey}` },
             })
             .then(async (response) => {
-                console.log(url);
                 const subjects = response.data.data;
                 const nextUrl = response.data.pages.next_url;
-                console.log(nextUrl);
                 await postSubjects(subjects);
                 if (nextUrl) {
                     console.log('in next url');

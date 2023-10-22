@@ -4,7 +4,6 @@ import { QuizConfig } from '../QuizConfig.tsx';
 import { beforeEach, vitest } from 'vitest';
 import * as WaniKaniApi from '../../api/waniKaniApi.ts';
 import { userEvent } from '@testing-library/user-event';
-import { when } from 'jest-when';
 
 vi.mock('../../api/waniKaniApi.ts');
 
@@ -50,7 +49,6 @@ describe('QuizConfig', () => {
     });
 
     it('calls WaniKani with correct form arguments', async () => {
-        when(WaniKaniApi.fetchQuizItems).mockImplementation(() => Promise.resolve());
         await userEvent.click(screen.getByRole('textbox', { name: 'API Key' }));
         await userEvent.paste('apiKey');
         await userEvent.click(screen.getByRole('checkbox', { name: 'Radicals' }));

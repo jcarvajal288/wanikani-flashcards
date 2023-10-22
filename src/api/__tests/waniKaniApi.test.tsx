@@ -76,7 +76,6 @@ describe('WaniKani API', () => {
             headers: { Authorization: 'Bearer apiKey' },
         };
         await fetchAndPostWaniKaniSubjectData('apiKey');
-        postSubjectsSpy.mockImplementation(() => Promise.resolve());
         expect(axiosGetSpy).toHaveBeenCalledWith('https://api.wanikani.com/v2/subjects', headers);
         expect(axiosGetSpy).toHaveBeenCalledWith('next-url', headers);
         expect(postSubjectsSpy).toHaveBeenCalledTimes(2);
