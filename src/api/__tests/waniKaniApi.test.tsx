@@ -19,6 +19,18 @@ describe('WaniKani API', () => {
                 kanji: false,
                 vocabulary: false,
             },
+            srsLevels: {
+                apprentice_1: false,
+                apprentice_2: false,
+                apprentice_3: false,
+                apprentice_4: false,
+                apprentice_5: false,
+                guru_1: false,
+                guru_2: false,
+                master: false,
+                enlightened: false,
+                burned: false,
+            },
         };
 
         const headers = {

@@ -19,15 +19,18 @@ describe('QuizConfig', () => {
         expect(screen.getByText('Configure Quiz')).toBeVisible();
     });
 
-    it('has an API key input', () => {
-        expect(screen.getByRole('textbox', { name: 'API Key' }));
-    });
-
-    it('shows type selectors', () => {
-        expect(screen.getByText('Item Types'));
-        expect(screen.getByRole('checkbox', { name: 'Radicals' }));
-        expect(screen.getByRole('checkbox', { name: 'Kanji' }));
-        expect(screen.getByRole('checkbox', { name: 'Vocabulary' }));
+    it('shows srs selectors', () => {
+        expect(screen.getByText('SRS Levels'));
+        expect(screen.getByRole('checkbox', { name: 'Apprentice 1' }));
+        expect(screen.getByRole('checkbox', { name: 'Apprentice 2' }));
+        expect(screen.getByRole('checkbox', { name: 'Apprentice 3' }));
+        expect(screen.getByRole('checkbox', { name: 'Apprentice 4' }));
+        expect(screen.getByRole('checkbox', { name: 'Apprentice 5' }));
+        expect(screen.getByRole('checkbox', { name: 'Guru 1' }));
+        expect(screen.getByRole('checkbox', { name: 'Guru 2' }));
+        expect(screen.getByRole('checkbox', { name: 'Master' }));
+        expect(screen.getByRole('checkbox', { name: 'Enlightened' }));
+        expect(screen.getByRole('checkbox', { name: 'Burned' }));
     });
 
     it('shows Generate Quiz button', () => {
@@ -60,6 +63,18 @@ describe('QuizConfig', () => {
                 radical: true,
                 kanji: false,
                 vocabulary: true,
+            },
+            srsLevels: {
+                apprentice_1: false,
+                apprentice_2: false,
+                apprentice_3: false,
+                apprentice_4: false,
+                apprentice_5: false,
+                guru_1: false,
+                guru_2: false,
+                master: false,
+                enlightened: false,
+                burned: false,
             },
         });
     });

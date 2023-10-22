@@ -38,7 +38,6 @@ export const fetchAndPostWaniKaniSubjectData = async (apiKey: string): Promise<v
                 const nextUrl = response.data.pages.next_url;
                 await postSubjects(subjects);
                 if (nextUrl) {
-                    console.log('in next url');
                     await fetchAndPost(apiKey, nextUrl);
                 }
             });
