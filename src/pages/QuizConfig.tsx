@@ -11,7 +11,7 @@ export type QuizConfigFormData = {
 };
 
 export const QuizConfig = () => {
-    const [formData, setFormData] = useState<QuizConfigFormData>({
+    const baseFormState: QuizConfigFormData = {
         apiKey: '',
         subjectTypes: {
             radical: false,
@@ -30,7 +30,9 @@ export const QuizConfig = () => {
             enlightened: false,
             burned: false,
         },
-    });
+    };
+
+    const [formData, setFormData] = useState<QuizConfigFormData>(baseFormState);
 
     const setFormValue = (field: Partial<QuizConfigFormData>) => {
         setFormData({

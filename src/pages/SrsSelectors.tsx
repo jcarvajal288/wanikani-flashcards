@@ -32,46 +32,52 @@ export const SrsSelectors = (props: SrsSelectorsParams) => (
         <Stack direction='column'>
             <Typography variant='h5'>SRS Levels</Typography>
             <FormGroup>
-                <FormControlLabel
-                    control={<Checkbox onChange={props.toggleApp1} />}
-                    label={'Apprentice 1'}
-                />
-                <FormControlLabel
-                    control={<Checkbox onChange={props.toggleApp2} />}
-                    label={'Apprentice 2'}
-                />
-                <FormControlLabel
-                    control={<Checkbox onChange={props.toggleApp3} />}
-                    label={'Apprentice 3'}
-                />
-                <FormControlLabel
-                    control={<Checkbox onChange={props.toggleApp4} />}
-                    label={'Apprentice 4'}
-                />
-                <FormControlLabel
-                    control={<Checkbox onChange={props.toggleApp5} />}
-                    label={'Apprentice 5'}
-                />
-                <FormControlLabel
-                    control={<Checkbox onChange={props.toggleGuru1} />}
-                    label={'Guru 1'}
-                />
-                <FormControlLabel
-                    control={<Checkbox onChange={props.toggleGuru2} />}
-                    label={'Guru 2'}
-                />
-                <FormControlLabel
-                    control={<Checkbox onChange={props.toggleMaster} />}
-                    label={'Master'}
-                />
-                <FormControlLabel
-                    control={<Checkbox onChange={props.toggleEnlightened} />}
-                    label={'Enlightened'}
-                />
-                <FormControlLabel
-                    control={<Checkbox onChange={props.toggleBurned} />}
-                    label={'Burned'}
-                />
+                <Stack direction='row'>
+                    <Stack>
+                        <FormControlLabel
+                            control={<Checkbox onChange={props.toggleApp1} />}
+                            label={'Apprentice 1'}
+                        />
+                        <FormControlLabel
+                            control={<Checkbox onChange={props.toggleApp2} />}
+                            label={'Apprentice 2'}
+                        />
+                        <FormControlLabel
+                            control={<Checkbox onChange={props.toggleApp3} />}
+                            label={'Apprentice 3'}
+                        />
+                        <FormControlLabel
+                            control={<Checkbox onChange={props.toggleApp4} />}
+                            label={'Apprentice 4'}
+                        />
+                        <FormControlLabel
+                            control={<Checkbox onChange={props.toggleApp5} />}
+                            label={'Apprentice 5'}
+                        />
+                    </Stack>
+                    <Stack>
+                        <FormControlLabel
+                            control={<Checkbox onChange={props.toggleGuru1} />}
+                            label={'Guru 1'}
+                        />
+                        <FormControlLabel
+                            control={<Checkbox onChange={props.toggleGuru2} />}
+                            label={'Guru 2'}
+                        />
+                        <FormControlLabel
+                            control={<Checkbox onChange={props.toggleMaster} />}
+                            label={'Master'}
+                        />
+                        <FormControlLabel
+                            control={<Checkbox onChange={props.toggleEnlightened} />}
+                            label={'Enlightened'}
+                        />
+                        <FormControlLabel
+                            control={<Checkbox onChange={props.toggleBurned} />}
+                            label={'Burned'}
+                        />
+                    </Stack>
+                </Stack>
             </FormGroup>
         </Stack>
     </Paper>
