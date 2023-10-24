@@ -1,6 +1,7 @@
 import { QuizConfigFormData } from '../pages/QuizConfig.tsx';
 import axios from 'axios';
 import { postSubjects } from './backendApi.ts';
+import { as } from 'vitest/dist/reporters-5f784f42';
 
 const waniKaniApiUrl = 'https://api.wanikani.com/v2';
 
@@ -11,7 +12,7 @@ const buildHeaders = (quizConfig: QuizConfigFormData) => {
 };
 
 const constructQueryString = (qc: QuizConfigFormData): string => {
-    const subjectTypes = (qc: QuizConfigFormData): string => {
+    const buildSubjectParam = (qc: QuizConfigFormData): string => {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         const subjectKeys = Object.keys(qc.subjectTypes).filter((key) => qc.subjectTypes[key]);
@@ -19,7 +20,22 @@ const constructQueryString = (qc: QuizConfigFormData): string => {
         const initialString = subjectKeys.join(',');
         return `subject_types=${initialString}` + (qc.subjectTypes.vocabulary ? ',kana_vocabulary' : '');
     };
-    return `${waniKaniApiUrl}/assignments?${subjectTypes(qc)}`;
+
+    const buildSrsParam = (qc: QuizConfigFormData): string => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        const srsKeys = Object.entries(qc.srsLevels);
+        const srsStages = srsKeys
+            .map((entry) => [srsKeys.indexOf(entry), entry[1]])
+            .filter((entry) => entry[1])
+            .map((entry) => Number(entry[0]) + 1);
+        if (srsStages.length > 0) {
+            return 'srs_stages=' + srsStages.join(',');
+        } else return '';
+    };
+
+    const parameters = [buildSubjectParam(qc), buildSrsParam(qc)].filter((p) => p.length > 0).join('&');
+    return `${waniKaniApiUrl}/assignments?${parameters}`;
 };
 
 export const fetchQuizItems = async (quizConfig: QuizConfigFormData) => {

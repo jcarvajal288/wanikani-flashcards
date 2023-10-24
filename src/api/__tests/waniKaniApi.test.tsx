@@ -67,6 +67,54 @@ describe('WaniKani API', () => {
                 headers,
             );
         });
+
+        it('for a single SRS level', () => {
+            const quizConfig: QuizConfigFormData = {
+                ...baseQueryConfig,
+                srsLevels: {
+                    ...baseQueryConfig.srsLevels,
+                    apprentice_1: true,
+                },
+            };
+            fetchQuizItems(quizConfig);
+            expect(axiosGetSpy).toHaveBeenCalledWith('https://api.wanikani.com/v2/assignments?srs_stages=1', headers);
+        });
+
+        it('for multiple SRS levels', () => {
+            const quizConfig: QuizConfigFormData = {
+                ...baseQueryConfig,
+                srsLevels: {
+                    ...baseQueryConfig.srsLevels,
+                    apprentice_1: true,
+                    apprentice_2: true,
+                    guru_1: true,
+                },
+            };
+            fetchQuizItems(quizConfig);
+            expect(axiosGetSpy).toHaveBeenCalledWith(
+                'https://api.wanikani.com/v2/assignments?srs_stages=1,2,6',
+                headers,
+            );
+        });
+
+        it('for subjects and srs levels', () => {
+            const quizConfig: QuizConfigFormData = {
+                ...baseQueryConfig,
+                subjectTypes: {
+                    ...baseQueryConfig.subjectTypes,
+                    kanji: true,
+                },
+                srsLevels: {
+                    ...baseQueryConfig.srsLevels,
+                    apprentice_1: true,
+                },
+            };
+            fetchQuizItems(quizConfig);
+            expect(axiosGetSpy).toHaveBeenCalledWith(
+                'https://api.wanikani.com/v2/assignments?subject_types=kanji&srs_stages=1',
+                headers,
+            );
+        });
     });
 
     it('can fetch WaniKani subjects and follow the next_url link', async () => {

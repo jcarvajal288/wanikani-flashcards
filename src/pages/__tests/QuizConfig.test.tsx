@@ -51,11 +51,52 @@ describe('QuizConfig', () => {
         expect(fetchWanikaniSubjectDataSpy).toHaveBeenCalledWith('apiKey');
     });
 
+    it('calls WaniKani with all form arguments checked', async () => {
+        await userEvent.click(screen.getByRole('textbox', { name: 'API Key' }));
+        await userEvent.paste('apiKey');
+        await userEvent.click(screen.getByRole('checkbox', { name: 'Radicals' }));
+        await userEvent.click(screen.getByRole('checkbox', { name: 'Kanji' }));
+        await userEvent.click(screen.getByRole('checkbox', { name: 'Vocabulary' }));
+        await userEvent.click(screen.getByRole('checkbox', { name: 'Apprentice 1' }));
+        await userEvent.click(screen.getByRole('checkbox', { name: 'Apprentice 2' }));
+        await userEvent.click(screen.getByRole('checkbox', { name: 'Apprentice 3' }));
+        await userEvent.click(screen.getByRole('checkbox', { name: 'Apprentice 4' }));
+        await userEvent.click(screen.getByRole('checkbox', { name: 'Apprentice 5' }));
+        await userEvent.click(screen.getByRole('checkbox', { name: 'Guru 1' }));
+        await userEvent.click(screen.getByRole('checkbox', { name: 'Guru 2' }));
+        await userEvent.click(screen.getByRole('checkbox', { name: 'Master' }));
+        await userEvent.click(screen.getByRole('checkbox', { name: 'Enlightened' }));
+        await userEvent.click(screen.getByRole('checkbox', { name: 'Burned' }));
+        await userEvent.click(screen.getByRole('button', { name: 'Generate Quiz' }));
+        expect(fetchQuizItemsSpy).toBeCalledWith({
+            apiKey: 'apiKey',
+            subjectTypes: {
+                radical: true,
+                kanji: true,
+                vocabulary: true,
+            },
+            srsLevels: {
+                apprentice_1: true,
+                apprentice_2: true,
+                apprentice_3: true,
+                apprentice_4: true,
+                apprentice_5: true,
+                guru_1: true,
+                guru_2: true,
+                master: true,
+                enlightened: true,
+                burned: true,
+            },
+        });
+    });
+
     it('calls WaniKani with correct form arguments', async () => {
         await userEvent.click(screen.getByRole('textbox', { name: 'API Key' }));
         await userEvent.paste('apiKey');
         await userEvent.click(screen.getByRole('checkbox', { name: 'Radicals' }));
         await userEvent.click(screen.getByRole('checkbox', { name: 'Vocabulary' }));
+        await userEvent.click(screen.getByRole('checkbox', { name: 'Apprentice 1' }));
+        await userEvent.click(screen.getByRole('checkbox', { name: 'Guru 2' }));
         await userEvent.click(screen.getByRole('button', { name: 'Generate Quiz' }));
         expect(fetchQuizItemsSpy).toBeCalledWith({
             apiKey: 'apiKey',
@@ -65,13 +106,13 @@ describe('QuizConfig', () => {
                 vocabulary: true,
             },
             srsLevels: {
-                apprentice_1: false,
+                apprentice_1: true,
                 apprentice_2: false,
                 apprentice_3: false,
                 apprentice_4: false,
                 apprentice_5: false,
                 guru_1: false,
-                guru_2: false,
+                guru_2: true,
                 master: false,
                 enlightened: false,
                 burned: false,
