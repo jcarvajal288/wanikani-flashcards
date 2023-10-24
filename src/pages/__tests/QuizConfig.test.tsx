@@ -12,7 +12,7 @@ describe('QuizConfig', () => {
     const fetchWanikaniSubjectDataSpy = vi.spyOn(WaniKaniApi, 'fetchAndPostWaniKaniSubjectData');
 
     beforeEach(() => {
-        render(<QuizConfig />);
+        render(<QuizConfig setQuizItems={() => {}} />);
     });
 
     it('has a title', () => {
@@ -35,6 +35,13 @@ describe('QuizConfig', () => {
 
     it('shows Generate Quiz button', () => {
         expect(screen.getByRole('button', { name: 'Generate Quiz' }));
+    });
+
+    it('alerts the user when they press the Generate Quiz button without inputting their API Key', async () => {
+        vitest.spyOn(window, 'alert').mockImplementation(() => {});
+        await userEvent.click(screen.getByRole('button', { name: /Generate Quiz/i }));
+        expect(fetchQuizItemsSpy).not.toHaveBeenCalled();
+        expect(window.alert).toBeCalledWith('You must enter your API Key before performing this action.');
     });
 
     it('alerts the user when they press the Update Wanikani Data button without inputting their API Key', async () => {

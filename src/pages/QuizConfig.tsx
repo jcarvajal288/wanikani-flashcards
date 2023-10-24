@@ -1,8 +1,9 @@
 import { Button, Stack, TextField, Typography } from '@mui/material';
-import { FormEvent, useState } from 'react';
+import { Dispatch, FormEvent, useState } from 'react';
 import { fetchAndPostWaniKaniSubjectData, fetchQuizItems } from '../api/waniKaniApi.ts';
 import { SubjectSelectors, SubjectTypes } from './SubjectSelectors.tsx';
 import { SrsLevels, SrsSelectors } from './SrsSelectors.tsx';
+import { JSONValue } from '../types.ts';
 
 export type QuizConfigFormData = {
     apiKey: string;
@@ -10,7 +11,11 @@ export type QuizConfigFormData = {
     srsLevels: SrsLevels;
 };
 
-export const QuizConfig = () => {
+type QuizConfigParams = {
+    setQuizItems: Dispatch<JSONValue[]>;
+};
+
+export const QuizConfig = (props: QuizConfigParams) => {
     const baseFormState: QuizConfigFormData = {
         apiKey: '',
         subjectTypes: {
@@ -61,9 +66,14 @@ export const QuizConfig = () => {
         });
     };
 
-    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        fetchQuizItems(formData);
+        if (formData.apiKey === '') {
+            alert('You must enter your API Key before performing this action.');
+        } else {
+            const quizItems = await fetchQuizItems(formData);
+            props.setQuizItems(quizItems);
+        }
     };
 
     const handleDatabaseRefresh = async () => {

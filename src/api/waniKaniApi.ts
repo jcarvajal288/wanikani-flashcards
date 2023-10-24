@@ -1,7 +1,6 @@
 import { QuizConfigFormData } from '../pages/QuizConfig.tsx';
 import axios from 'axios';
 import { postSubjects } from './backendApi.ts';
-import { as } from 'vitest/dist/reporters-5f784f42';
 
 const waniKaniApiUrl = 'https://api.wanikani.com/v2';
 
@@ -40,7 +39,9 @@ const constructQueryString = (qc: QuizConfigFormData): string => {
 
 export const fetchQuizItems = async (quizConfig: QuizConfigFormData) => {
     const queryString = constructQueryString(quizConfig);
-    return await axios.get(queryString, buildHeaders(quizConfig));
+    return await axios.get(queryString, buildHeaders(quizConfig)).then((response) => {
+        return response.data;
+    });
 };
 
 export const fetchAndPostWaniKaniSubjectData = async (apiKey: string): Promise<void> => {
