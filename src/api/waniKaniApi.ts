@@ -40,7 +40,7 @@ const constructQueryString = (qc: QuizConfigFormData): string => {
 export const fetchQuizItems = async (quizConfig: QuizConfigFormData) => {
     const queryString = constructQueryString(quizConfig);
     return await axios.get(queryString, buildHeaders(quizConfig)).then((response) => {
-        return response.data.map((assignment: { data: { subject_id: number } }) => assignment.data.subject_id);
+        return response.data.data.map((assignment: { data: { subject_id: number } }) => assignment.data.subject_id);
     });
 };
 
