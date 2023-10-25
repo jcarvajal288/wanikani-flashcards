@@ -25,7 +25,6 @@ describe('QuizConfig', () => {
         expect(screen.getByRole('checkbox', { name: 'Apprentice 2' }));
         expect(screen.getByRole('checkbox', { name: 'Apprentice 3' }));
         expect(screen.getByRole('checkbox', { name: 'Apprentice 4' }));
-        expect(screen.getByRole('checkbox', { name: 'Apprentice 5' }));
         expect(screen.getByRole('checkbox', { name: 'Guru 1' }));
         expect(screen.getByRole('checkbox', { name: 'Guru 2' }));
         expect(screen.getByRole('checkbox', { name: 'Master' }));
@@ -68,7 +67,6 @@ describe('QuizConfig', () => {
         await userEvent.click(screen.getByRole('checkbox', { name: 'Apprentice 2' }));
         await userEvent.click(screen.getByRole('checkbox', { name: 'Apprentice 3' }));
         await userEvent.click(screen.getByRole('checkbox', { name: 'Apprentice 4' }));
-        await userEvent.click(screen.getByRole('checkbox', { name: 'Apprentice 5' }));
         await userEvent.click(screen.getByRole('checkbox', { name: 'Guru 1' }));
         await userEvent.click(screen.getByRole('checkbox', { name: 'Guru 2' }));
         await userEvent.click(screen.getByRole('checkbox', { name: 'Master' }));
@@ -87,7 +85,6 @@ describe('QuizConfig', () => {
                 apprentice_2: true,
                 apprentice_3: true,
                 apprentice_4: true,
-                apprentice_5: true,
                 guru_1: true,
                 guru_2: true,
                 master: true,
@@ -117,7 +114,6 @@ describe('QuizConfig', () => {
                 apprentice_2: false,
                 apprentice_3: false,
                 apprentice_4: false,
-                apprentice_5: false,
                 guru_1: false,
                 guru_2: true,
                 master: false,

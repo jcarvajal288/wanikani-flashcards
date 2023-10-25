@@ -28,7 +28,6 @@ export const QuizConfig = (props: QuizConfigParams) => {
             apprentice_2: false,
             apprentice_3: false,
             apprentice_4: false,
-            apprentice_5: false,
             guru_1: false,
             guru_2: false,
             master: false,
@@ -111,7 +110,6 @@ export const QuizConfig = (props: QuizConfigParams) => {
                                     toggleApp2={(e) => setSrsLevel({ apprentice_2: e.target.checked })}
                                     toggleApp3={(e) => setSrsLevel({ apprentice_3: e.target.checked })}
                                     toggleApp4={(e) => setSrsLevel({ apprentice_4: e.target.checked })}
-                                    toggleApp5={(e) => setSrsLevel({ apprentice_5: e.target.checked })}
                                     toggleGuru1={(e) => setSrsLevel({ guru_1: e.target.checked })}
                                     toggleGuru2={(e) => setSrsLevel({ guru_2: e.target.checked })}
                                     toggleMaster={(e) => setSrsLevel({ master: e.target.checked })}

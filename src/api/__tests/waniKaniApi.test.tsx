@@ -10,6 +10,7 @@ vitest.mock('../backendApi.ts');
 describe('WaniKani API', () => {
     const postSubjectsSpy = vi.spyOn(BackendApi, 'postSubjects');
     const axiosGetSpy = vi.spyOn(axios, 'get');
+    axiosGetSpy.mockResolvedValue({ data: '' });
 
     describe('can construct a query string', () => {
         const baseQueryConfig: QuizConfigFormData = {
@@ -24,7 +25,6 @@ describe('WaniKani API', () => {
                 apprentice_2: false,
                 apprentice_3: false,
                 apprentice_4: false,
-                apprentice_5: false,
                 guru_1: false,
                 guru_2: false,
                 master: false,
@@ -92,7 +92,7 @@ describe('WaniKani API', () => {
             };
             fetchQuizItems(quizConfig);
             expect(axiosGetSpy).toHaveBeenCalledWith(
-                'https://api.wanikani.com/v2/assignments?srs_stages=1,2,6',
+                'https://api.wanikani.com/v2/assignments?srs_stages=1,2,5',
                 headers,
             );
         });

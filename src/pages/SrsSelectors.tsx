@@ -6,7 +6,6 @@ export type SrsLevels = {
     apprentice_2: boolean;
     apprentice_3: boolean;
     apprentice_4: boolean;
-    apprentice_5: boolean;
     guru_1: boolean;
     guru_2: boolean;
     master: boolean;
@@ -19,7 +18,6 @@ interface SrsSelectorsParams {
     toggleApp2: (e: ChangeEvent<HTMLInputElement>) => void;
     toggleApp3: (e: ChangeEvent<HTMLInputElement>) => void;
     toggleApp4: (e: ChangeEvent<HTMLInputElement>) => void;
-    toggleApp5: (e: ChangeEvent<HTMLInputElement>) => void;
     toggleGuru1: (e: ChangeEvent<HTMLInputElement>) => void;
     toggleGuru2: (e: ChangeEvent<HTMLInputElement>) => void;
     toggleMaster: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -49,10 +47,6 @@ export const SrsSelectors = (props: SrsSelectorsParams) => (
                         <FormControlLabel
                             control={<Checkbox onChange={props.toggleApp4} />}
                             label={'Apprentice 4'}
-                        />
-                        <FormControlLabel
-                            control={<Checkbox onChange={props.toggleApp5} />}
-                            label={'Apprentice 5'}
                         />
                     </Stack>
                     <Stack>
