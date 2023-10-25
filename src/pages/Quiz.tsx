@@ -4,17 +4,23 @@ import { loadSubjects } from '../api/backendApi.ts';
 import { JSONValue } from '../types.ts';
 
 export const Quiz = (props: { quizItems: number[] }) => {
-    const [subjects, setSubjects] = useState<JSONValue[]>([]);
+    const [subjects, setSubjects] = useState<JSONValue[] | null>(null);
     useEffect(() => {
         loadSubjects(props.quizItems).then((fetchedSubjects: JSONValue[]) => {
             setSubjects(fetchedSubjects);
         });
-    }, [props.quizItems]);
+    }, []);
 
     return (
-        <Stack>
-            <Typography>Quiz contains:</Typography>
-            <Typography>{JSON.stringify(props.quizItems)}</Typography>
-        </Stack>
+        <>
+        {
+            subjects != null && (
+            <Stack>
+                <Typography>QUIZ</Typography>
+                <Typography variant='h1'>{subjects[0].data.slug}</Typography>
+            </Stack>
+        )
+        }
+        </>
     );
 };

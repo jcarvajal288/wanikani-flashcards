@@ -24,6 +24,16 @@ app.post('/fillDatabase', jsonParser, async (request, response) => {
     response.sendStatus(201);
 });
 
+app.get('/loadFromDatabase', async (request, response) => {
+    const subjectIds = request.query.subject_ids.split(',').map(Number)
+    console.log(subjectIds)
+    const database = databaseClient.db('wanikani_db');
+    const subjectsTable = database.collection('subjects');
+    const subjects = await subjectsTable.find({data.id: {$in: subjectIds}}).toArray()
+    console.log(subjects)
+    response.json(subjects);
+})
+
 app.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`);
 });
