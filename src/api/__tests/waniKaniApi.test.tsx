@@ -1,4 +1,4 @@
-import { expect } from 'vitest';
+import { beforeEach, expect } from 'vitest';
 import { QuizConfigFormData } from '../../pages/QuizConfig.tsx';
 import { fetchAndPostWaniKaniSubjectData, fetchQuizItems } from '../waniKaniApi.ts';
 import axios from 'axios';
@@ -10,32 +10,35 @@ vitest.mock('../backendApi.ts');
 describe('WaniKani API', () => {
     const postSubjectsSpy = vi.spyOn(BackendApi, 'postSubjects');
     const axiosGetSpy = vi.spyOn(axios, 'get');
-    axiosGetSpy.mockResolvedValue({ data: '' });
+
+    const baseQueryConfig: QuizConfigFormData = {
+        apiKey: 'apiKey',
+        subjectTypes: {
+            radical: false,
+            kanji: false,
+            vocabulary: false,
+        },
+        srsLevels: {
+            apprentice_1: false,
+            apprentice_2: false,
+            apprentice_3: false,
+            apprentice_4: false,
+            guru_1: false,
+            guru_2: false,
+            master: false,
+            enlightened: false,
+            burned: false,
+        },
+    };
 
     describe('can construct a query string', () => {
-        const baseQueryConfig: QuizConfigFormData = {
-            apiKey: 'apiKey',
-            subjectTypes: {
-                radical: false,
-                kanji: false,
-                vocabulary: false,
-            },
-            srsLevels: {
-                apprentice_1: false,
-                apprentice_2: false,
-                apprentice_3: false,
-                apprentice_4: false,
-                guru_1: false,
-                guru_2: false,
-                master: false,
-                enlightened: false,
-                burned: false,
-            },
-        };
-
         const headers = {
             headers: { Authorization: 'Bearer apiKey' },
         };
+
+        beforeEach(() => {
+            axiosGetSpy.mockResolvedValue({ data: [] });
+        });
 
         it('for kanji', () => {
             const quizConfig: QuizConfigFormData = {
@@ -139,5 +142,17 @@ describe('WaniKani API', () => {
         expect(axiosGetSpy).toHaveBeenCalledWith('https://api.wanikani.com/v2/subjects', headers);
         expect(axiosGetSpy).toHaveBeenCalledWith('next-url', headers);
         expect(postSubjectsSpy).toHaveBeenCalledTimes(2);
+    });
+
+    it('fetchQuizItems returns an array of subject IDs', async () => {
+        axiosGetSpy.mockResolvedValue({
+            data: [
+                { data: { subject_id: 1 } },
+                { data: { subject_id: 23 } },
+                { data: { subject_id: 8 } },
+                { data: { subject_id: 365 } },
+            ],
+        });
+        expect(await fetchQuizItems(baseQueryConfig)).toEqual([1, 23, 8, 365]);
     });
 });
