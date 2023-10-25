@@ -6,10 +6,10 @@ import { JSONValue } from '../types.ts';
 export const Quiz = (props: { quizItems: number[] }) => {
     const [subjects, setSubjects] = useState<JSONValue[]>([]);
     useEffect(() => {
-        loadSubjects(props.quizItems).then((fetchedSubjects) => {
+        loadSubjects(props.quizItems).then((fetchedSubjects: JSONValue[]) => {
             setSubjects(fetchedSubjects);
         });
-    }, []);
+    }, [props.quizItems]);
 
     return (
         <Stack>
