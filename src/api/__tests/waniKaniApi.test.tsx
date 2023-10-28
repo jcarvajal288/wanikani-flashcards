@@ -37,7 +37,7 @@ describe('WaniKani API', () => {
         };
 
         beforeEach(() => {
-            axiosGetSpy.mockResolvedValue({ data: [] });
+            axiosGetSpy.mockResolvedValue({ data: { data: [] } });
         });
 
         it('for kanji', () => {
@@ -146,12 +146,14 @@ describe('WaniKani API', () => {
 
     it('fetchQuizItems returns an array of subject IDs', async () => {
         axiosGetSpy.mockResolvedValue({
-            data: [
-                { data: { subject_id: 1 } },
-                { data: { subject_id: 23 } },
-                { data: { subject_id: 8 } },
-                { data: { subject_id: 365 } },
-            ],
+            data: {
+                data: [
+                    { data: { subject_id: 1 } },
+                    { data: { subject_id: 23 } },
+                    { data: { subject_id: 8 } },
+                    { data: { subject_id: 365 } },
+                ],
+            },
         });
         expect(await fetchQuizItems(baseQueryConfig)).toEqual([1, 23, 8, 365]);
     });

@@ -37,7 +37,7 @@ const constructQueryString = (qc: QuizConfigFormData): string => {
     return `${waniKaniApiUrl}/assignments?${parameters}`;
 };
 
-export const fetchQuizItems = async (quizConfig: QuizConfigFormData) => {
+export const fetchQuizItems = async (quizConfig: QuizConfigFormData): Promise<number[]> => {
     const queryString = constructQueryString(quizConfig);
     return await axios.get(queryString, buildHeaders(quizConfig)).then((response) => {
         return response.data.data.map((assignment: { data: { subject_id: number } }) => assignment.data.subject_id);

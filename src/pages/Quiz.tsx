@@ -9,18 +9,19 @@ export const Quiz = (props: { quizItems: number[] }) => {
         loadSubjects(props.quizItems).then((fetchedSubjects: JSONValue[]) => {
             setSubjects(fetchedSubjects);
         });
-    }, []);
+    }, [subjects?.length]);
 
-    return (
-        <>
-        {
-            subjects != null && (
-            <Stack>
-                <Typography>QUIZ</Typography>
-                <Typography variant='h1'>{subjects[0].data.slug}</Typography>
-            </Stack>
-        )
-        }
-        </>
-    );
+    if (!subjects) {
+        return <Typography>Loading...</Typography>;
+    } else {
+        return (
+            <>
+                {subjects && (
+                    <Stack>
+                        <Typography variant='h1'>{subjects[0].data.characters}</Typography>
+                    </Stack>
+                )}
+            </>
+        );
+    }
 };

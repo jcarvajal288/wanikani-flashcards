@@ -3,7 +3,6 @@ import { Dispatch, FormEvent, useState } from 'react';
 import { fetchAndPostWaniKaniSubjectData, fetchQuizItems } from '../api/waniKaniApi.ts';
 import { SubjectSelectors, SubjectTypes } from './SubjectSelectors.tsx';
 import { SrsLevels, SrsSelectors } from './SrsSelectors.tsx';
-import { JSONValue } from '../types.ts';
 
 export type QuizConfigFormData = {
     apiKey: string;
@@ -12,7 +11,7 @@ export type QuizConfigFormData = {
 };
 
 type QuizConfigParams = {
-    setQuizItems: Dispatch<JSONValue[]>;
+    setQuizItems: Dispatch<number[]>;
 };
 
 export const QuizConfig = (props: QuizConfigParams) => {
