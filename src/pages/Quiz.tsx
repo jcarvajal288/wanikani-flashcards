@@ -1,12 +1,12 @@
 import { Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { loadSubjects } from '../api/backendApi.ts';
-import { JSONValue } from '../types.ts';
+import { WaniKaniSubject } from '../types.ts';
 
 export const Quiz = (props: { quizItems: number[] }) => {
-    const [subjects, setSubjects] = useState<JSONValue[] | null>(null);
+    const [subjects, setSubjects] = useState<WaniKaniSubject[] | null>(null);
     useEffect(() => {
-        loadSubjects(props.quizItems).then((fetchedSubjects: JSONValue[]) => {
+        loadSubjects(props.quizItems).then((fetchedSubjects: WaniKaniSubject[]) => {
             setSubjects(fetchedSubjects);
         });
     }, [subjects?.length]);

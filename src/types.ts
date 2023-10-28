@@ -5,3 +5,9 @@ interface JSONObject {
 }
 
 interface JSONArray extends Array<JSONValue> {}
+
+export type WaniKaniSubject = {
+    data: {
+        characters: string;
+    };
+};
