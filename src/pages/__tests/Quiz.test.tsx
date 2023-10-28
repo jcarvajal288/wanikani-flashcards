@@ -32,7 +32,7 @@ describe('Quiz', () => {
     });
 
     it('looks up assignment subjects in the database on page load', async () => {
-        //expect(loadSubjectsSpy).toHaveBeenCalledOnce();
+        expect(loadSubjectsSpy).toHaveBeenCalledOnce();
         expect(loadSubjectsSpy).toHaveBeenCalledWith(mockQuizItems);
         expect(axiosGetSpy).toHaveBeenCalledWith(`http://localhost:3001/loadFromDatabase?subject_ids=1,2,3`);
     });

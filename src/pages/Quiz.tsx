@@ -9,7 +9,7 @@ export const Quiz = (props: { quizItems: number[] }) => {
         loadSubjects(props.quizItems).then((fetchedSubjects: WaniKaniSubject[]) => {
             setSubjects(fetchedSubjects);
         });
-    }, [subjects?.length]);
+    }, [props.quizItems]);
 
     if (!subjects) {
         return <Typography>Loading...</Typography>;
