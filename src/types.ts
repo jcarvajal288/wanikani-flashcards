@@ -10,4 +10,5 @@ export type WaniKaniSubject = {
     data: {
         characters: string;
     };
+    object: 'radical' | 'kanji' | 'vocabulary' | 'kana_vocabulary';
 };

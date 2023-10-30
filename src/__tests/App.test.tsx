@@ -20,6 +20,7 @@ describe('App', () => {
                 data: {
                     characters: '出す',
                 },
+                object: 'vocabulary',
             },
         ]);
         render(<App />);
