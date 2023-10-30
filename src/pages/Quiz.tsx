@@ -14,6 +14,8 @@ export const Quiz = (props: { quizItems: number[] }) => {
 
     if (!subjects) {
         return <Typography>Loading...</Typography>;
+    } else if (currentSubject >= subjects.length) {
+        return <Typography variant='h1'>Quiz Finished!</Typography>;
     } else {
         return (
             <>

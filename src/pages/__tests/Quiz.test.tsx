@@ -48,9 +48,11 @@ describe('Quiz', () => {
         expect(await screen.findByText('人工')).toBeVisible();
     });
 
-    it('loads next subject when the Next Subject button is pressed', async () => {
+    it('cycles through subjects when the Next Subject button is pressed', async () => {
         expect(await screen.findByText('人工')).toBeVisible();
         await userEvent.click(screen.getByRole('button', { name: 'Next Subject' }));
         expect(await screen.findByText('大した')).toBeVisible();
+        await userEvent.click(screen.getByRole('button', { name: 'Next Subject' }));
+        expect(await screen.findByText('Quiz Finished!')).toBeVisible();
     });
 });
