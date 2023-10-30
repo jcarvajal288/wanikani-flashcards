@@ -4,6 +4,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { Quiz } from '../Quiz.tsx';
 import * as BackendApi from '../../api/backendApi.ts';
 import axios from 'axios';
+import { userEvent } from '@testing-library/user-event';
 
 vitest.mock('axios');
 vitest.mock('../backendApi.ts');
@@ -19,6 +20,12 @@ describe('Quiz', () => {
                 id: 7560,
                 data: {
                     characters: '人工',
+                },
+            },
+            {
+                id: 1111,
+                data: {
+                    characters: '大した',
                 },
             },
         ],
@@ -39,5 +46,11 @@ describe('Quiz', () => {
 
     it('displays the subject slug as a header', async () => {
         expect(await screen.findByText('人工')).toBeVisible();
+    });
+
+    it('loads next subject when the Next Subject button is pressed', async () => {
+        expect(await screen.findByText('人工')).toBeVisible();
+        await userEvent.click(screen.getByRole('button', { name: 'Next Subject' }));
+        expect(await screen.findByText('大した')).toBeVisible();
     });
 });
