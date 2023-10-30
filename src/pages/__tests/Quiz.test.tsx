@@ -44,8 +44,12 @@ describe('Quiz', () => {
         expect(axiosGetSpy).toHaveBeenCalledWith(`http://localhost:3001/loadFromDatabase?subject_ids=1,2,3`);
     });
 
-    it('displays the subject slug as a header', async () => {
+    it('displays the subject characters as a header', async () => {
         expect(await screen.findByText('人工')).toBeVisible();
+    });
+
+    it('displays the answer entry field', async () => {
+        expect(await screen.findByRole('textbox')).toBeVisible();
     });
 
     it('cycles through subjects when the Next Subject button is pressed', async () => {

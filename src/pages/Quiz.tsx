@@ -1,4 +1,4 @@
-import { Button, Paper, Stack, Typography } from '@mui/material';
+import { Button, Paper, Stack, TextField, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { loadSubjects } from '../api/backendApi.ts';
 import { WaniKaniSubject } from '../types.ts';
@@ -49,6 +49,7 @@ export const Quiz = (props: { quizItems: number[] }) => {
                                 {subjects[currentSubject].data.characters}
                             </Typography>
                         </Paper>
+                        <TextField />
                         <Button onClick={() => setCurrentSubject(currentSubject + 1)}>Next Subject</Button>
                     </Stack>
                 )}
