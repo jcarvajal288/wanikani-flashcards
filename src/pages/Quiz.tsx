@@ -15,7 +15,7 @@ interface QuizParams {
 
 export const Quiz = (props: QuizParams) => {
     const [subjects, setSubjects] = useState<WaniKaniSubject[] | null>(null);
-    const [currentSubject, setCurrentSubject] = useState<number>(0);
+    const [currentSubjectIndex, setCurrentSubjectIndex] = useState<number>(0);
     const [answerInputValue, setAnswerInputValue] = useState<string>('');
 
     useEffect(() => {
@@ -39,9 +39,19 @@ export const Quiz = (props: QuizParams) => {
         setAnswerInputValue(toHiragana(romaji));
     };
 
+    const checkAnswer = (): void => {
+        if (subjects === null) return;
+
+        const acceptedReadings = subjects[currentSubjectIndex].data.readings.map((r) => r.reading);
+        if (acceptedReadings.includes(answerInputValue)) {
+            setCurrentSubjectIndex(currentSubjectIndex + 1);
+            setAnswerInputValue('');
+        }
+    };
+
     if (!subjects) {
         return <Typography>Loading...</Typography>;
-    } else if (currentSubject >= subjects.length) {
+    } else if (currentSubjectIndex >= subjects.length) {
         return (
             <>
                 <Typography variant='h1'>Quiz Finished!</Typography>
@@ -55,7 +65,7 @@ export const Quiz = (props: QuizParams) => {
                     <Stack>
                         <Paper
                             sx={{
-                                bgcolor: determineColor(subjects[currentSubject]),
+                                bgcolor: determineColor(subjects[currentSubjectIndex]),
                                 color: '#FFFFFF',
                             }}
                         >
@@ -64,14 +74,14 @@ export const Quiz = (props: QuizParams) => {
                                 fontWeight={400}
                                 marginTop='20px'
                             >
-                                {subjects[currentSubject].data.characters}
+                                {subjects[currentSubjectIndex].data.characters}
                             </Typography>
                         </Paper>
                         <TextField
                             value={answerInputValue}
                             onChange={(event) => convertRomaji(event.target.value)}
                         />
-                        <Button onClick={() => setCurrentSubject(currentSubject + 1)}>Next Subject</Button>
+                        <Button onClick={checkAnswer}>Check Answer</Button>
                     </Stack>
                 )}
             </>

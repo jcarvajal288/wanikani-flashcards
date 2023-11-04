@@ -20,12 +20,22 @@ describe('Quiz', () => {
                 id: 7560,
                 data: {
                     characters: '人工',
+                    readings: [
+                        {
+                            reading: 'じんこう',
+                        },
+                    ],
                 },
             },
             {
                 id: 1111,
                 data: {
                     characters: '大した',
+                    readings: [
+                        {
+                            reading: 'たいした',
+                        },
+                    ],
                 },
             },
         ],
@@ -43,14 +53,16 @@ describe('Quiz', () => {
         });
     });
 
+    const submitAnswer = async (answer: string): Promise<void> => {
+        const textbox = screen.getByRole('textbox');
+        await userEvent.type(textbox, answer);
+        await userEvent.click(screen.getByRole('button', { name: 'Check Answer' }));
+    };
+
     it('looks up assignment subjects in the database on page load', async () => {
         expect(loadSubjectsSpy).toHaveBeenCalledOnce();
         expect(loadSubjectsSpy).toHaveBeenCalledWith(mockQuizItems);
         expect(axiosGetSpy).toHaveBeenCalledWith(`http://localhost:3001/loadFromDatabase?subject_ids=1,2,3`);
-    });
-
-    it('displays the subject characters as a header', async () => {
-        expect(await screen.findByText('人工')).toBeVisible();
     });
 
     it('converts romaji typed into the textbox to hiragana', async () => {
@@ -59,11 +71,19 @@ describe('Quiz', () => {
         expect(screen.getByDisplayValue('わたし')).toBeVisible();
     });
 
-    it('cycles through subjects when the Next Subject button is pressed', async () => {
+    it('does not proceed with an incorrect answer', async () => {
         expect(await screen.findByText('人工')).toBeVisible();
-        await userEvent.click(screen.getByRole('button', { name: 'Next Subject' }));
+        await submitAnswer('asdf');
+        expect(screen.queryByText('大した')).toBeNull();
+    });
+
+    it('cycles through the quiz with correct answers', async () => {
+        expect(await screen.findByText('人工')).toBeVisible();
+
+        await submitAnswer('jinkou');
         expect(await screen.findByText('大した')).toBeVisible();
-        await userEvent.click(screen.getByRole('button', { name: 'Next Subject' }));
+
+        await submitAnswer('taishita');
         expect(await screen.findByText('Quiz Finished!')).toBeVisible();
     });
 });
