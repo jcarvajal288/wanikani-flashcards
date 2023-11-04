@@ -28,5 +28,9 @@ describe('App', () => {
         await userEvent.paste('apiKey');
         await userEvent.click(screen.getByRole('button', { name: 'Generate Quiz' }));
         expect(await screen.findByText('出す')).toBeVisible();
+        await userEvent.click(screen.getByRole('button', { name: 'Next Subject' }));
+        expect(await screen.findByText('Quiz Finished!')).toBeVisible();
+        await userEvent.click(screen.getByRole('button', { name: /Return To Configuration/i }));
+        expect(await screen.findByText('Configure Quiz')).toBeVisible();
     });
 });

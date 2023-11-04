@@ -5,7 +5,18 @@ import { Quiz } from './pages/Quiz.tsx';
 
 const App = () => {
     const [quizItems, setQuizItems] = useState<number[]>([]);
-    return <>{quizItems.length === 0 ? <QuizConfig setQuizItems={setQuizItems} /> : <Quiz quizItems={quizItems} />}</>;
+    return (
+        <>
+            {quizItems.length === 0 ? (
+                <QuizConfig setQuizItems={setQuizItems} />
+            ) : (
+                <Quiz
+                    quizItems={quizItems}
+                    returnHome={() => setQuizItems([])}
+                />
+            )}
+        </>
+    );
 };
 
 export default App;

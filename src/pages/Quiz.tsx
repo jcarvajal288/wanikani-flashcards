@@ -7,7 +7,12 @@ const radicalColor = '#00AAFF';
 const kanjiColor = '#FF00AA';
 const vocabColor = '#AA00FF';
 
-export const Quiz = (props: { quizItems: number[] }) => {
+interface QuizParams {
+    quizItems: number[];
+    returnHome: () => void;
+}
+
+export const Quiz = (props: QuizParams) => {
     const [subjects, setSubjects] = useState<WaniKaniSubject[] | null>(null);
     const [currentSubject, setCurrentSubject] = useState<number>(0);
     useEffect(() => {
@@ -29,7 +34,12 @@ export const Quiz = (props: { quizItems: number[] }) => {
     if (!subjects) {
         return <Typography>Loading...</Typography>;
     } else if (currentSubject >= subjects.length) {
-        return <Typography variant='h1'>Quiz Finished!</Typography>;
+        return (
+            <>
+                <Typography variant='h1'>Quiz Finished!</Typography>
+                <Button onClick={props.returnHome}>Return to Configuration</Button>
+            </>
+        );
     } else {
         return (
             <>
