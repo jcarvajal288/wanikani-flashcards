@@ -51,6 +51,7 @@ describe('Quiz', () => {
                 />,
             );
         });
+        await screen.findByText('人工');
     });
 
     const submitAnswer = async (answer: string): Promise<void> => {
@@ -72,18 +73,20 @@ describe('Quiz', () => {
     });
 
     it('does not proceed with an incorrect answer', async () => {
-        expect(await screen.findByText('人工')).toBeVisible();
         await submitAnswer('asdf');
         expect(screen.queryByText('大した')).toBeNull();
     });
 
     it('cycles through the quiz with correct answers', async () => {
-        expect(await screen.findByText('人工')).toBeVisible();
-
         await submitAnswer('jinkou');
         expect(await screen.findByText('大した')).toBeVisible();
 
         await submitAnswer('taishita');
         expect(await screen.findByText('Quiz Finished!')).toBeVisible();
+    });
+
+    it('correctly handles "nn" as a single ん', async () => {
+        await submitAnswer('jinnkou');
+        expect(await screen.findByText('大した')).toBeVisible();
     });
 });

@@ -36,7 +36,16 @@ export const Quiz = (props: QuizParams) => {
     };
 
     const convertRomaji = (romaji: string): void => {
-        setAnswerInputValue(toHiragana(romaji));
+        const newCharacter = romaji.slice(answerInputValue.length);
+        if (newCharacter === 'n') {
+            if (answerInputValue.charAt(answerInputValue.length - 1) === 'n') {
+                setAnswerInputValue(answerInputValue.slice(0, -1) + 'ん');
+            } else {
+                setAnswerInputValue(romaji);
+            }
+        } else {
+            setAnswerInputValue(toHiragana(romaji));
+        }
     };
 
     const checkAnswer = (): void => {
