@@ -41,6 +41,12 @@ describe('Quiz', () => {
         ],
     };
 
+    const submitAnswer = async (answer: string): Promise<void> => {
+        const textbox = screen.getByRole('textbox');
+        await userEvent.type(textbox, answer);
+        await userEvent.click(screen.getByRole('button', { name: 'Check Answer' }));
+    };
+
     beforeEach(async () => {
         axiosGetSpy.mockResolvedValue(mockSubjects);
         await waitFor(() => {
@@ -53,12 +59,6 @@ describe('Quiz', () => {
         });
         await screen.findByText('人工');
     });
-
-    const submitAnswer = async (answer: string): Promise<void> => {
-        const textbox = screen.getByRole('textbox');
-        await userEvent.type(textbox, answer);
-        await userEvent.click(screen.getByRole('button', { name: 'Check Answer' }));
-    };
 
     it('looks up assignment subjects in the database on page load', async () => {
         expect(loadSubjectsSpy).toHaveBeenCalledOnce();
@@ -87,6 +87,12 @@ describe('Quiz', () => {
 
     it('correctly handles "nn" as a single ん', async () => {
         await submitAnswer('jinnkou');
+        expect(await screen.findByText('大した')).toBeVisible();
+    });
+
+    it('submits answer when Enter key is pressed', async () => {
+        const textbox = screen.getByRole('textbox');
+        await userEvent.type(textbox, 'jinnkou{enter}');
         expect(await screen.findByText('大した')).toBeVisible();
     });
 });

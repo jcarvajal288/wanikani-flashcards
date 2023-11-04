@@ -1,5 +1,5 @@
 import { Button, Paper, Stack, TextField, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, KeyboardEvent } from 'react';
 import { loadSubjects } from '../api/backendApi.ts';
 import { WaniKaniSubject } from '../types.ts';
 import { toHiragana } from 'wanakana';
@@ -58,6 +58,12 @@ export const Quiz = (props: QuizParams) => {
         }
     };
 
+    const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+        if (event.key === 'Enter') {
+            checkAnswer();
+        }
+    };
+
     if (!subjects) {
         return <Typography>Loading...</Typography>;
     } else if (currentSubjectIndex >= subjects.length) {
@@ -89,6 +95,7 @@ export const Quiz = (props: QuizParams) => {
                         <TextField
                             value={answerInputValue}
                             onChange={(event) => convertRomaji(event.target.value)}
+                            onKeyDown={onKeyDown}
                         />
                         <Button onClick={checkAnswer}>Check Answer</Button>
                     </Stack>
