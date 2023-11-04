@@ -34,7 +34,12 @@ describe('Quiz', () => {
     beforeEach(async () => {
         axiosGetSpy.mockResolvedValue(mockSubjects);
         await waitFor(() => {
-            render(<Quiz quizItems={mockQuizItems} />);
+            render(
+                <Quiz
+                    quizItems={mockQuizItems}
+                    returnHome={() => {}}
+                />,
+            );
         });
     });
 
@@ -48,8 +53,10 @@ describe('Quiz', () => {
         expect(await screen.findByText('人工')).toBeVisible();
     });
 
-    it('displays the answer entry field', async () => {
-        expect(await screen.findByRole('textbox')).toBeVisible();
+    it('converts romaji typed into the textbox to hiragana', async () => {
+        await userEvent.click(await screen.findByRole('textbox'));
+        await userEvent.paste('watashi');
+        expect(screen.getByDisplayValue('わたし')).toBeVisible();
     });
 
     it('cycles through subjects when the Next Subject button is pressed', async () => {

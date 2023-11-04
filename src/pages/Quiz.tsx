@@ -2,6 +2,7 @@ import { Button, Paper, Stack, TextField, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { loadSubjects } from '../api/backendApi.ts';
 import { WaniKaniSubject } from '../types.ts';
+import { toHiragana } from 'wanakana';
 
 const radicalColor = '#00AAFF';
 const kanjiColor = '#FF00AA';
@@ -15,6 +16,8 @@ interface QuizParams {
 export const Quiz = (props: QuizParams) => {
     const [subjects, setSubjects] = useState<WaniKaniSubject[] | null>(null);
     const [currentSubject, setCurrentSubject] = useState<number>(0);
+    const [answerInputValue, setAnswerInputValue] = useState<string>('');
+
     useEffect(() => {
         loadSubjects(props.quizItems).then((fetchedSubjects: WaniKaniSubject[]) => {
             setSubjects(fetchedSubjects);
@@ -31,6 +34,11 @@ export const Quiz = (props: QuizParams) => {
                 return vocabColor;
         }
     };
+
+    const convertRomaji = (romaji: string): void => {
+        setAnswerInputValue(toHiragana(romaji));
+    };
+
     if (!subjects) {
         return <Typography>Loading...</Typography>;
     } else if (currentSubject >= subjects.length) {
@@ -59,7 +67,10 @@ export const Quiz = (props: QuizParams) => {
                                 {subjects[currentSubject].data.characters}
                             </Typography>
                         </Paper>
-                        <TextField />
+                        <TextField
+                            value={answerInputValue}
+                            onChange={(event) => convertRomaji(event.target.value)}
+                        />
                         <Button onClick={() => setCurrentSubject(currentSubject + 1)}>Next Subject</Button>
                     </Stack>
                 )}
