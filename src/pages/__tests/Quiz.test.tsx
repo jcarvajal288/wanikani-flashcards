@@ -79,6 +79,7 @@ describe('Quiz', () => {
 
     it('cycles through the quiz with correct answers', async () => {
         await submitAnswer('jinkou');
+        expect(screen.queryByText('人工')).toBeNull();
         expect(await screen.findByText('大した')).toBeVisible();
 
         await submitAnswer('taishita');
