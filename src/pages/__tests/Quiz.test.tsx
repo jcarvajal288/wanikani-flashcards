@@ -45,6 +45,7 @@ describe('Quiz', () => {
         const textbox = screen.getByRole('textbox');
         await userEvent.type(textbox, answer);
         await userEvent.click(screen.getByRole('button', { name: 'Check Answer' }));
+        await userEvent.click(screen.getByRole('button', { name: 'Check Answer' }));
     };
 
     beforeEach(async () => {
@@ -93,7 +94,7 @@ describe('Quiz', () => {
 
     it('submits answer when Enter key is pressed', async () => {
         const textbox = screen.getByRole('textbox');
-        await userEvent.type(textbox, 'jinnkou{enter}');
+        await userEvent.type(textbox, 'jinnkou{enter}{enter}');
         expect(await screen.findByText('大した')).toBeVisible();
     });
 });

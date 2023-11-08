@@ -17,6 +17,7 @@ interface QuestionParams {
 
 export const Question = (props: QuestionParams) => {
     const [answerInputValue, setAnswerInputValue] = useState<string>('');
+    const [answerCorrectness, setAnswerCorrectness] = useState<boolean | null>(null);
     const answerInputRef = useRef(null);
 
     useEffect(() => {
@@ -35,18 +36,32 @@ export const Question = (props: QuestionParams) => {
     };
 
     const checkAnswer = (): void => {
-        const acceptedReadings = props.subject.data.readings.map((r) => r.reading);
-        if (acceptedReadings.includes(answerInputValue)) {
-            setAnswerInputValue('');
+        if (answerCorrectness === null) {
+            const acceptedReadings = props.subject.data.readings.map((r) => r.reading);
+            setAnswerCorrectness(acceptedReadings.includes(answerInputValue))
+            return;
+        }
+        if (answerCorrectness) {
             props.moveToNextSubject();
         }
+        setAnswerCorrectness(null)
+        setAnswerInputValue('');
     };
 
     const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
-        console.log(answerInputRef.current);
         if (event.key === 'Enter') {
             checkAnswer();
         }
+    };
+
+    const determineInputColor = () => {
+        if (answerCorrectness === true) return correctColor;
+        else if (answerCorrectness === false) return incorrectColor;
+        else return '#FFFFFF'
+    };
+
+    const determineTextColor = () => {
+        return answerCorrectness === null ? '#000000' : '#FFFFFF';
     };
 
     return (
@@ -73,6 +88,12 @@ export const Question = (props: QuestionParams) => {
                         setAnswerInputValue(event.target.value);
                     }}
                     onKeyDown={onKeyDown}
+                    sx={{
+                        bgcolor: determineInputColor(),
+                        input: {
+                            color: determineTextColor()
+                        }
+                    }}
                 />
                 <Button onClick={checkAnswer}>Check Answer</Button>
             </Stack>
