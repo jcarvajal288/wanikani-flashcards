@@ -97,4 +97,11 @@ describe('Quiz', () => {
         await userEvent.type(textbox, 'jinnkou{enter}{enter}');
         expect(await screen.findByText('大した')).toBeVisible();
     });
+
+    it('disables answer input after a submission', async () => {
+        const textbox = screen.getByRole('textbox');
+        await userEvent.type(textbox, 'jinnkou{enter}wa');
+        expect(screen.getByDisplayValue('じんこう')).toBeVisible();
+        expect(screen.queryByDisplayValue('じんこうわ')).toBeNull();
+    })
 });

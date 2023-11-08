@@ -7,8 +7,8 @@ const radicalColor = '#00AAFF';
 const kanjiColor = '#FF00AA';
 const vocabColor = '#AA00FF';
 
-const correctColor = '#00FF00';
-const incorrectColor = '#FF0000';
+const correctColor = '#88CC00';
+const incorrectColor = '#FF0033';
 
 interface QuestionParams {
     subject: WaniKaniSubject;
@@ -49,6 +49,9 @@ export const Question = (props: QuestionParams) => {
     };
 
     const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+        if (answerCorrectness !== null) {
+            event.preventDefault();
+        }
         if (event.key === 'Enter') {
             checkAnswer();
         }
