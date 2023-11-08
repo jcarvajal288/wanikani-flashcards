@@ -1,11 +1,14 @@
 import { WaniKaniSubject } from '../types.ts';
 import { Button, Paper, Stack, TextField, Typography } from '@mui/material';
 import { bind } from 'wanakana';
-import { KeyboardEvent, useEffect, useRef, useState } from 'react';
+import {ChangeEvent, KeyboardEvent, useEffect, useRef, useState} from 'react';
 
 const radicalColor = '#00AAFF';
 const kanjiColor = '#FF00AA';
 const vocabColor = '#AA00FF';
+
+const correctColor = '#00FF00';
+const incorrectColor = '#FF0000';
 
 interface QuestionParams {
     subject: WaniKaniSubject;
@@ -33,8 +36,6 @@ export const Question = (props: QuestionParams) => {
 
     const checkAnswer = (): void => {
         const acceptedReadings = props.subject.data.readings.map((r) => r.reading);
-        console.log(acceptedReadings);
-        console.log(answerInputValue);
         if (acceptedReadings.includes(answerInputValue)) {
             setAnswerInputValue('');
             props.moveToNextSubject();
@@ -68,8 +69,7 @@ export const Question = (props: QuestionParams) => {
                 <TextField
                     value={answerInputValue}
                     inputRef={answerInputRef}
-                    onChange={(event) => {
-                        console.log('onChange');
+                    onInput={(event: ChangeEvent<HTMLInputElement>) => {
                         setAnswerInputValue(event.target.value);
                     }}
                     onKeyDown={onKeyDown}
