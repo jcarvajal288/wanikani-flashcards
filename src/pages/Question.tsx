@@ -1,7 +1,7 @@
 import { WaniKaniSubject } from '../types.ts';
 import { Button, Paper, Stack, TextField, Typography } from '@mui/material';
-import { toHiragana } from 'wanakana';
-import { KeyboardEvent, useState } from 'react';
+import { bind } from 'wanakana';
+import { KeyboardEvent, useEffect, useRef, useState } from 'react';
 
 const radicalColor = '#00AAFF';
 const kanjiColor = '#FF00AA';
@@ -14,6 +14,11 @@ interface QuestionParams {
 
 export const Question = (props: QuestionParams) => {
     const [answerInputValue, setAnswerInputValue] = useState<string>('');
+    const answerInputRef = useRef(null);
+
+    useEffect(() => {
+        bind(answerInputRef.current!);
+    }, []);
 
     const determineColor = (waniKaniSubject: WaniKaniSubject): string => {
         switch (waniKaniSubject.object) {
@@ -26,21 +31,10 @@ export const Question = (props: QuestionParams) => {
         }
     };
 
-    const convertRomaji = (romaji: string): void => {
-        const newCharacter = romaji.slice(answerInputValue.length);
-        if (newCharacter === 'n') {
-            if (answerInputValue.charAt(answerInputValue.length - 1) === 'n') {
-                setAnswerInputValue(answerInputValue.slice(0, -1) + 'ん');
-            } else {
-                setAnswerInputValue(romaji);
-            }
-        } else {
-            setAnswerInputValue(toHiragana(romaji));
-        }
-    };
-
     const checkAnswer = (): void => {
         const acceptedReadings = props.subject.data.readings.map((r) => r.reading);
+        console.log(acceptedReadings);
+        console.log(answerInputValue);
         if (acceptedReadings.includes(answerInputValue)) {
             setAnswerInputValue('');
             props.moveToNextSubject();
@@ -48,6 +42,7 @@ export const Question = (props: QuestionParams) => {
     };
 
     const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+        console.log(answerInputRef.current);
         if (event.key === 'Enter') {
             checkAnswer();
         }
@@ -72,7 +67,11 @@ export const Question = (props: QuestionParams) => {
                 </Paper>
                 <TextField
                     value={answerInputValue}
-                    onChange={(event) => convertRomaji(event.target.value)}
+                    inputRef={answerInputRef}
+                    onChange={(event) => {
+                        console.log('onChange');
+                        setAnswerInputValue(event.target.value);
+                    }}
                     onKeyDown={onKeyDown}
                 />
                 <Button onClick={checkAnswer}>Check Answer</Button>
