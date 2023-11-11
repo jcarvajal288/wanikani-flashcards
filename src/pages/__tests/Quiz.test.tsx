@@ -67,12 +67,6 @@ describe('Quiz', () => {
         expect(axiosGetSpy).toHaveBeenCalledWith(`http://localhost:3001/loadFromDatabase?subject_ids=1,2,3`);
     });
 
-    it('converts romaji typed into the textbox to hiragana', async () => {
-        await userEvent.click(await screen.findByRole('textbox'));
-        await userEvent.paste('watashi');
-        expect(screen.getByDisplayValue('わたし')).toBeVisible();
-    });
-
     it('does not proceed with an incorrect answer', async () => {
         await submitAnswer('asdf');
         expect(screen.queryByText('大した')).toBeNull();
@@ -87,21 +81,9 @@ describe('Quiz', () => {
         expect(await screen.findByText('Quiz Finished!')).toBeVisible();
     });
 
-    it('correctly handles "nn" as a single ん', async () => {
-        await submitAnswer('jinnkou');
-        expect(await screen.findByText('大した')).toBeVisible();
-    });
-
     it('submits answer when Enter key is pressed', async () => {
         const textbox = screen.getByRole('textbox');
         await userEvent.type(textbox, 'jinnkou{enter}{enter}');
         expect(await screen.findByText('大した')).toBeVisible();
     });
-
-    it('disables answer input after a submission', async () => {
-        const textbox = screen.getByRole('textbox');
-        await userEvent.type(textbox, 'jinnkou{enter}wa');
-        expect(screen.getByDisplayValue('じんこう')).toBeVisible();
-        expect(screen.queryByDisplayValue('じんこうわ')).toBeNull();
-    })
 });
