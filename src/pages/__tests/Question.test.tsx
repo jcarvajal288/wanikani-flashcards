@@ -40,27 +40,54 @@ describe('Question', () => {
         );
     };
 
-    it('displays if it is a kanji reading question', () => {
-        renderReadingQuestion(mockKanjiSubject);
-        expect(screen.getByTestId('type-header').textContent).toEqual('Kanji Reading');
+    const renderMeaningQuestion = (subject: WaniKaniSubject) => {
+        render(
+            <Question
+                subject={subject}
+                moveToNextSubject={() => {}}
+                type='meaning'
+            />,
+        );
+    };
+
+    describe('Reading Questions', () => {
+        it('displays if it is a kanji reading question', () => {
+            renderReadingQuestion(mockKanjiSubject);
+            expect(screen.getByTestId('type-header').textContent).toEqual('Kanji Reading');
+        });
+
+        it('displays if it is a vocabulary reading question', () => {
+            renderReadingQuestion(mockVocabSubject);
+            expect(screen.getByTestId('type-header').textContent).toEqual('Vocabulary Reading');
+        });
+
+        it('converts romaji typed into the textbox to hiragana', async () => {
+            renderReadingQuestion(mockVocabSubject);
+            await userEvent.click(await screen.findByRole('textbox'));
+            await userEvent.paste('watashi');
+            expect(screen.getByDisplayValue('わたし')).toBeVisible();
+        });
+
+        it('correctly handles "nn" as a single ん', async () => {
+            renderReadingQuestion(mockVocabSubject);
+            await userEvent.type(screen.getByRole('textbox'), 'jinnkou');
+            expect(screen.getByDisplayValue('じんこう')).toBeVisible();
+        });
     });
 
-    it('displays if it is a vocabulary reading question', () => {
-        renderReadingQuestion(mockVocabSubject);
-        expect(screen.getByTestId('type-header').textContent).toEqual('Vocabulary Reading');
-    });
+    describe('Meaning Questions', () => {
+        it('displays if it is a kanji meaning question', () => {
+            renderMeaningQuestion(mockKanjiSubject);
+            expect(screen.getByTestId('type-header').textContent).toEqual('Kanji Meaning');
+        });
 
-    it('converts romaji typed into the textbox to hiragana', async () => {
-        renderReadingQuestion(mockVocabSubject);
-        await userEvent.click(await screen.findByRole('textbox'));
-        await userEvent.paste('watashi');
-        expect(screen.getByDisplayValue('わたし')).toBeVisible();
-    });
-
-    it('correctly handles "nn" as a single ん', async () => {
-        renderReadingQuestion(mockVocabSubject);
-        await userEvent.type(screen.getByRole('textbox'), 'jinnkou');
-        expect(screen.getByDisplayValue('じんこう')).toBeVisible();
+        it('leaves text typed into the textbox as english', async () => {
+            renderMeaningQuestion(mockVocabSubject);
+            await userEvent.click(await screen.findByRole('textbox'));
+            await userEvent.paste('watashi');
+            expect(screen.queryByDisplayValue('わたし')).toBeNull();
+            expect(screen.getByDisplayValue('watashi')).toBeVisible();
+        });
     });
 
     it('disables answer input after a submission', async () => {

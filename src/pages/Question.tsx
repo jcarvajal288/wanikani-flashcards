@@ -23,7 +23,9 @@ export const Question = (props: QuestionParams) => {
     const answerInputRef = useRef(null);
 
     useEffect(() => {
-        bind(answerInputRef.current!);
+        if (props.type === 'reading') {
+            bind(answerInputRef.current!);
+        }
     }, []);
 
     const determineColor = (waniKaniSubject: WaniKaniSubject): string => {
@@ -74,7 +76,7 @@ export const Question = (props: QuestionParams) => {
             props.subject.object === 'kana_vocabulary'
                 ? 'Vocabulary'
                 : props.subject.object[0].toUpperCase() + props.subject.object.slice(1);
-        const questionType = 'Reading';
+        const questionType = props.type === 'reading' ? 'Reading' : 'Meaning';
         return `${subjectType} <b>${questionType}</b>`;
     };
 
