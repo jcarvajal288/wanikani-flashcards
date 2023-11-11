@@ -1,7 +1,8 @@
 import { WaniKaniSubject } from '../types.ts';
 import { Button, Paper, Stack, TextField, Typography } from '@mui/material';
 import { bind } from 'wanakana';
-import {ChangeEvent, KeyboardEvent, useEffect, useRef, useState} from 'react';
+import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from 'react';
+import parse from 'html-react-parser';
 
 const radicalColor = '#00AAFF';
 const kanjiColor = '#FF00AA';
@@ -13,6 +14,7 @@ const incorrectColor = '#FF0033';
 interface QuestionParams {
     subject: WaniKaniSubject;
     moveToNextSubject: () => void;
+    type: 'reading' | 'meaning';
 }
 
 export const Question = (props: QuestionParams) => {
@@ -38,13 +40,13 @@ export const Question = (props: QuestionParams) => {
     const checkAnswer = (): void => {
         if (answerCorrectness === null) {
             const acceptedReadings = props.subject.data.readings.map((r) => r.reading);
-            setAnswerCorrectness(acceptedReadings.includes(answerInputValue))
+            setAnswerCorrectness(acceptedReadings.includes(answerInputValue));
             return;
         }
         if (answerCorrectness) {
             props.moveToNextSubject();
         }
-        setAnswerCorrectness(null)
+        setAnswerCorrectness(null);
         setAnswerInputValue('');
     };
 
@@ -60,11 +62,20 @@ export const Question = (props: QuestionParams) => {
     const determineInputColor = () => {
         if (answerCorrectness === true) return correctColor;
         else if (answerCorrectness === false) return incorrectColor;
-        else return '#FFFFFF'
+        else return '#FFFFFF';
     };
 
     const determineTextColor = () => {
         return answerCorrectness === null ? '#000000' : '#FFFFFF';
+    };
+
+    const buildTypeHeader = () => {
+        const subjectType =
+            props.subject.object === 'kana_vocabulary'
+                ? 'Vocabulary'
+                : props.subject.object[0].toUpperCase() + props.subject.object.slice(1);
+        const questionType = 'Reading';
+        return `${subjectType} <b>${questionType}</b>`;
     };
 
     return (
@@ -84,6 +95,15 @@ export const Question = (props: QuestionParams) => {
                         {props.subject.data.characters}
                     </Typography>
                 </Paper>
+                <Paper
+                    data-testid='type-header'
+                    sx={{
+                        bgcolor: '#333333',
+                        color: '#FFFFFF',
+                    }}
+                >
+                    <Typography variant='h6'>{parse(buildTypeHeader())}</Typography>
+                </Paper>
                 <TextField
                     value={answerInputValue}
                     inputRef={answerInputRef}
@@ -94,8 +114,8 @@ export const Question = (props: QuestionParams) => {
                     sx={{
                         bgcolor: determineInputColor(),
                         input: {
-                            color: determineTextColor()
-                        }
+                            color: determineTextColor(),
+                        },
                     }}
                 />
                 <Button onClick={checkAnswer}>Check Answer</Button>
