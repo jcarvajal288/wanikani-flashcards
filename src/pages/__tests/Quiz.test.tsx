@@ -26,6 +26,7 @@ describe('Quiz', () => {
                         },
                     ],
                 },
+                object: 'vocabulary',
             },
             {
                 id: 1111,
@@ -37,6 +38,7 @@ describe('Quiz', () => {
                         },
                     ],
                 },
+                object: 'vocabulary',
             },
         ],
     };

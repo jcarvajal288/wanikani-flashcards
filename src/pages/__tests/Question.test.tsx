@@ -51,12 +51,12 @@ describe('Question', () => {
     };
 
     describe('Reading Questions', () => {
-        it('displays if it is a kanji reading question', () => {
+        it('displays kanji reading header', () => {
             renderReadingQuestion(mockKanjiSubject);
             expect(screen.getByTestId('type-header').textContent).toEqual('Kanji Reading');
         });
 
-        it('displays if it is a vocabulary reading question', () => {
+        it('displays vocabulary reading header', () => {
             renderReadingQuestion(mockVocabSubject);
             expect(screen.getByTestId('type-header').textContent).toEqual('Vocabulary Reading');
         });

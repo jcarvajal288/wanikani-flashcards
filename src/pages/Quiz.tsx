@@ -33,6 +33,7 @@ export const Quiz = (props: QuizParams) => {
             <Question
                 subject={subjects[currentSubjectIndex]}
                 moveToNextSubject={() => setCurrentSubjectIndex(currentSubjectIndex + 1)}
+                type='reading'
             />
         );
     }
