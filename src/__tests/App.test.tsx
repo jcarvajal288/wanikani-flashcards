@@ -24,6 +24,11 @@ describe('App', () => {
                             reading: 'だす',
                         },
                     ],
+                    meanings: [
+                        {
+                            meaning: 'to take out'
+                        }
+                    ]
                 },
                 object: 'vocabulary',
             },

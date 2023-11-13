@@ -5,6 +5,7 @@ import { Quiz } from '../Quiz.tsx';
 import * as BackendApi from '../../api/backendApi.ts';
 import axios from 'axios';
 import { userEvent } from '@testing-library/user-event';
+import {WaniKaniSubject} from "../../types.ts";
 
 vitest.mock('axios');
 vitest.mock('../backendApi.ts');
@@ -14,10 +15,9 @@ describe('Quiz', () => {
     const axiosGetSpy = vi.spyOn(axios, 'get');
 
     const mockQuizItems = [1, 2, 3];
-    const mockSubjects = {
+    const mockSubjects: { data: WaniKaniSubject[] } = {
         data: [
             {
-                id: 7560,
                 data: {
                     characters: '人工',
                     readings: [
@@ -25,11 +25,15 @@ describe('Quiz', () => {
                             reading: 'じんこう',
                         },
                     ],
+                    meanings: [
+                        {
+                            meaning: 'construction',
+                        }
+                    ]
                 },
                 object: 'vocabulary',
             },
             {
-                id: 1111,
                 data: {
                     characters: '大した',
                     readings: [
@@ -37,6 +41,11 @@ describe('Quiz', () => {
                             reading: 'たいした',
                         },
                     ],
+                    meanings: [
+                        {
+                            meaning: 'great',
+                        }
+                    ]
                 },
                 object: 'vocabulary',
             },
