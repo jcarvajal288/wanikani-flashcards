@@ -14,6 +14,11 @@ describe('Question', () => {
                     reading: 'かく',
                 },
             ],
+            meanings: [
+                {
+                    meaning: 'angle',
+                }
+            ]
         },
         object: 'kanji',
     };
@@ -25,7 +30,13 @@ describe('Question', () => {
                 {
                     reading: 'じんこう',
                 },
+
             ],
+            meanings: [
+                {
+                    meaning: 'construction',
+                }
+            ]
         },
         object: 'vocabulary',
     };
@@ -48,6 +59,11 @@ describe('Question', () => {
                 type='meaning'
             />,
         );
+    };
+
+    const submitAnswer = async (submission: string) => {
+        const textbox = screen.getByRole('textbox');
+        await userEvent.type(textbox, `${submission}{enter}`);
     };
 
     describe('Reading Questions', () => {
@@ -73,6 +89,12 @@ describe('Question', () => {
             await userEvent.type(screen.getByRole('textbox'), 'jinnkou');
             expect(screen.getByDisplayValue('じんこう')).toBeVisible();
         });
+
+        it('evaluates a reading submission', async () => {
+            renderReadingQuestion(mockVocabSubject);
+            await submitAnswer('jinnkou')
+            expect(screen.getByText('Next')).toBeVisible();
+        })
     });
 
     describe('Meaning Questions', () => {
@@ -83,11 +105,16 @@ describe('Question', () => {
 
         it('leaves text typed into the textbox as english', async () => {
             renderMeaningQuestion(mockVocabSubject);
-            await userEvent.click(await screen.findByRole('textbox'));
-            await userEvent.paste('watashi');
+            await submitAnswer('watashi')
             expect(screen.queryByDisplayValue('わたし')).toBeNull();
             expect(screen.getByDisplayValue('watashi')).toBeVisible();
         });
+
+        it('evaluates a meaning submission', async () => {
+            renderMeaningQuestion(mockVocabSubject);
+            await submitAnswer('construction')
+            expect(screen.getByText('Next')).toBeVisible();
+        })
     });
 
     it('disables answer input after a submission', async () => {

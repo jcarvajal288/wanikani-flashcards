@@ -41,8 +41,10 @@ export const Question = (props: QuestionParams) => {
 
     const checkAnswer = (): void => {
         if (answerCorrectness === null) {
-            const acceptedReadings = props.subject.data.readings.map((r) => r.reading);
-            setAnswerCorrectness(acceptedReadings.includes(answerInputValue));
+            const acceptedAnswers = props.type === 'reading'
+                ? props.subject.data.readings.map((r) => r.reading)
+                : props.subject.data.meanings.map((m) => m.meaning);
+            setAnswerCorrectness(acceptedAnswers.includes(answerInputValue));
             return;
         }
         if (answerCorrectness) {
@@ -79,6 +81,12 @@ export const Question = (props: QuestionParams) => {
         const questionType = props.type === 'reading' ? 'Reading' : 'Meaning';
         return `${subjectType} <b>${questionType}</b>`;
     };
+
+    const determineSubmitButtonText = () => {
+        if (answerCorrectness === true) return 'Next';
+        else if (answerCorrectness === false) return 'Retry';
+        else return 'Check Answer';
+    }
 
     return (
         <>
@@ -120,7 +128,7 @@ export const Question = (props: QuestionParams) => {
                         },
                     }}
                 />
-                <Button onClick={checkAnswer}>Check Answer</Button>
+                <Button onClick={checkAnswer}>{determineSubmitButtonText()}</Button>
             </Stack>
         </>
     );

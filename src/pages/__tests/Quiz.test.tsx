@@ -43,11 +43,11 @@ describe('Quiz', () => {
         ],
     };
 
-    const submitAnswer = async (answer: string): Promise<void> => {
+    const submitAnswerAndContinue = async (answer: string): Promise<void> => {
         const textbox = screen.getByRole('textbox');
         await userEvent.type(textbox, answer);
         await userEvent.click(screen.getByRole('button', { name: 'Check Answer' }));
-        await userEvent.click(screen.getByRole('button', { name: 'Check Answer' }));
+        await userEvent.click(screen.getByRole('button', { name: 'Next' }));
     };
 
     beforeEach(async () => {
@@ -70,16 +70,20 @@ describe('Quiz', () => {
     });
 
     it('does not proceed with an incorrect answer', async () => {
-        await submitAnswer('asdf');
+        const textbox = screen.getByRole('textbox');
+        await userEvent.type(textbox, 'asdf');
+        await userEvent.click(screen.getByRole('button', { name: 'Check Answer' }));
+        expect(screen.queryByRole('button', { name: 'Check Answer'})).toBeNull();
+        expect(screen.getByRole('button', { name: 'Retry'})).toBeVisible();
         expect(screen.queryByText('大した')).toBeNull();
     });
 
     it('cycles through the quiz with correct answers', async () => {
-        await submitAnswer('jinkou');
+        await submitAnswerAndContinue('jinkou');
         expect(screen.queryByText('人工')).toBeNull();
         expect(await screen.findByText('大した')).toBeVisible();
 
-        await submitAnswer('taishita');
+        await submitAnswerAndContinue('taishita');
         expect(await screen.findByText('Quiz Finished!')).toBeVisible();
     });
 

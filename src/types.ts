@@ -10,10 +10,15 @@ type SubjectReading = {
     reading: string;
 };
 
+type SubjectMeaning = {
+    meaning: string;
+}
+
 export type WaniKaniSubject = {
     data: {
         characters: string;
         readings: SubjectReading[];
+        meanings: SubjectMeaning[];
     };
     object: 'radical' | 'kanji' | 'vocabulary' | 'kana_vocabulary';
 };
