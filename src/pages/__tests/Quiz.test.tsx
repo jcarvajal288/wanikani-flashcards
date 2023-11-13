@@ -89,16 +89,12 @@ describe('Quiz', () => {
 
     it('cycles through the quiz with correct answers', async () => {
         await submitAnswerAndContinue('jinkou');
+        await submitAnswerAndContinue('construction');
         expect(screen.queryByText('人工')).toBeNull();
         expect(await screen.findByText('大した')).toBeVisible();
 
         await submitAnswerAndContinue('taishita');
+        await submitAnswerAndContinue('great');
         expect(await screen.findByText('Quiz Finished!')).toBeVisible();
-    });
-
-    it('submits answer when Enter key is pressed', async () => {
-        const textbox = screen.getByRole('textbox');
-        await userEvent.type(textbox, 'jinnkou{enter}{enter}');
-        expect(await screen.findByText('大した')).toBeVisible();
     });
 });

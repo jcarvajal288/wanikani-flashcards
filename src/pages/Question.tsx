@@ -1,7 +1,7 @@
 import { WaniKaniSubject } from '../types.ts';
 import { Button, Paper, Stack, TextField, Typography } from '@mui/material';
-import { bind } from 'wanakana';
-import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from 'react';
+import {bind, unbind} from 'wanakana';
+import {ChangeEvent, KeyboardEvent, useEffect, useRef, useState} from 'react';
 import parse from 'html-react-parser';
 
 const radicalColor = '#00AAFF';
@@ -21,12 +21,17 @@ export const Question = (props: QuestionParams) => {
     const [answerInputValue, setAnswerInputValue] = useState<string>('');
     const [answerCorrectness, setAnswerCorrectness] = useState<boolean | null>(null);
     const answerInputRef = useRef(null);
+    const [isRefBound, setIsRefBound] = useState<boolean>(false);
 
     useEffect(() => {
-        if (props.type === 'reading') {
+        if (props.type === 'reading' && !isRefBound) {
             bind(answerInputRef.current!);
+            setIsRefBound(true);
+        } else if (isRefBound) {
+            unbind(answerInputRef.current!);
+            setIsRefBound(false);
         }
-    }, []);
+    }, [props.type]);
 
     const determineColor = (waniKaniSubject: WaniKaniSubject): string => {
         switch (waniKaniSubject.object) {
@@ -43,8 +48,8 @@ export const Question = (props: QuestionParams) => {
         if (answerCorrectness === null) {
             const acceptedAnswers = props.type === 'reading'
                 ? props.subject.data.readings.map((r) => r.reading)
-                : props.subject.data.meanings.map((m) => m.meaning);
-            setAnswerCorrectness(acceptedAnswers.includes(answerInputValue));
+                : props.subject.data.meanings.map((m) => m.meaning.toLowerCase());
+            setAnswerCorrectness(acceptedAnswers.includes(answerInputValue.toLowerCase()));
             return;
         }
         if (answerCorrectness) {

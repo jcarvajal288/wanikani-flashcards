@@ -16,7 +16,7 @@ describe('Question', () => {
             ],
             meanings: [
                 {
-                    meaning: 'angle',
+                    meaning: 'Angle',
                 }
             ]
         },
@@ -34,7 +34,7 @@ describe('Question', () => {
             ],
             meanings: [
                 {
-                    meaning: 'construction',
+                    meaning: 'Construction',
                 }
             ]
         },

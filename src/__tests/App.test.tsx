@@ -41,6 +41,7 @@ describe('App', () => {
 
         const textbox = screen.getByRole('textbox');
         await userEvent.type(textbox, 'だす{enter}{enter}');
+        await userEvent.type(textbox, 'to take out{enter}{enter}');
 
         expect(await screen.findByText('Quiz Finished!')).toBeVisible();
         await userEvent.click(screen.getByRole('button', { name: /Return To Configuration/i }));

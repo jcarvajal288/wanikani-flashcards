@@ -22,3 +22,8 @@ export type WaniKaniSubject = {
     };
     object: 'radical' | 'kanji' | 'vocabulary' | 'kana_vocabulary';
 };
+
+export type QuizQuestion = {
+    subject: WaniKaniSubject;
+    type: 'reading' | 'meaning'
+}
