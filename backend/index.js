@@ -15,6 +15,13 @@ const databaseClient = new MongoClient(databaseUri);
 
 app.use(cors());
 
+app.post('/dropDatabase', async (request, response) => {
+    const database = databaseClient.db('wanikani_db');
+    const subjectsTable = database.collection('subjects');
+    await subjectsTable.drop();
+    response.sendStatus(200);
+})
+
 app.post('/fillDatabase', jsonParser, async (request, response) => {
     const subjects = request.body;
     console.log(`Filling database with ${subjects.length} subjects`);

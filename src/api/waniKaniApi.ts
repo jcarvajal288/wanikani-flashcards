@@ -61,3 +61,4 @@ export const fetchAndPostWaniKaniSubjectData = async (apiKey: string): Promise<v
     };
     await fetchAndPost(apiKey, `${waniKaniApiUrl}/subjects`);
 };
+

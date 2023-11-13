@@ -15,9 +15,11 @@ export const Quiz = (props: QuizParams) => {
 
     useEffect(() => {
         loadSubjects(props.quizItems).then((fetchedSubjects: WaniKaniSubject[]) => {
+            console.log(fetchedSubjects.length)
             const questions: QuizQuestion[] = fetchedSubjects.map((subject) => {
                 return [{subject: subject, type: 'reading' as const}, {subject: subject, type: 'meaning' as const}]
             }).flat()
+            console.log(questions)
             setQuestions(questions);
         });
     }, [props.quizItems]);

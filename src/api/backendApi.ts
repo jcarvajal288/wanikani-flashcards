@@ -10,3 +10,7 @@ export const loadSubjects = async (subjects: number[]): Promise<WaniKaniSubject[
         .get(`http://localhost:3001/loadFromDatabase?subject_ids=${subjects.join(',')}`)
         .then((response) => response.data);
 };
+
+export const deleteAllSubjects = async (): Promise<void> => {
+    await axios.post('http://localhost:3001/dropDatabase');
+}
