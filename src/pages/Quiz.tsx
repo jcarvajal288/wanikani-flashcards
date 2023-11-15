@@ -7,19 +7,24 @@ import { Question } from './Question.tsx';
 interface QuizParams {
     quizItems: number[];
     returnHome: () => void;
+    shuffle: boolean;
 }
 
 export const Quiz = (props: QuizParams) => {
     const [questions, setQuestions] = useState<QuizQuestion[] | null>(null);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
 
+    const shuffle = (unshuffled: WaniKaniSubject[]) => unshuffled
+        .map(value => ({ value, sort: Math.random() }))
+        .sort((a, b) => a.sort - b.sort)
+        .map(({ value }) => value)
+
     useEffect(() => {
         loadSubjects(props.quizItems).then((fetchedSubjects: WaniKaniSubject[]) => {
-            console.log(fetchedSubjects.length)
-            const questions: QuizQuestion[] = fetchedSubjects.map((subject) => {
+	        const subjects = props.shuffle ? shuffle(fetchedSubjects) : fetchedSubjects
+            const questions: QuizQuestion[] = subjects.map((subject) => {
                 return [{subject: subject, type: 'reading' as const}, {subject: subject, type: 'meaning' as const}]
             }).flat()
-            console.log(questions)
             setQuestions(questions);
         });
     }, [props.quizItems]);

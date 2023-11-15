@@ -13,6 +13,7 @@ const App = () => {
                 <Quiz
                     quizItems={quizItems}
                     returnHome={() => setQuizItems([])}
+                    shuffle={true}
                 />
             )}
         </>

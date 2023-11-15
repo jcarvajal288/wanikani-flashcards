@@ -66,6 +66,7 @@ describe('Quiz', () => {
                 <Quiz
                     quizItems={mockQuizItems}
                     returnHome={() => {}}
+                    shuffle={false}
                 />,
             );
         });
