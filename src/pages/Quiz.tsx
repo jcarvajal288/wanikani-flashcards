@@ -23,7 +23,11 @@ export const Quiz = (props: QuizParams) => {
         loadSubjects(props.quizItems).then((fetchedSubjects: WaniKaniSubject[]) => {
 	        const subjects = props.shuffle ? shuffle(fetchedSubjects) : fetchedSubjects
             const questions: QuizQuestion[] = subjects.map((subject) => {
-                return [{subject: subject, type: 'reading' as const}, {subject: subject, type: 'meaning' as const}]
+                if (subject.object === 'radical') {
+                    return [{subject: subject, type: 'meaning' as const}]
+                } else {
+                    return [{subject: subject, type: 'reading' as const}, {subject: subject, type: 'meaning' as const}]
+                }
             }).flat()
             setQuestions(questions);
         });

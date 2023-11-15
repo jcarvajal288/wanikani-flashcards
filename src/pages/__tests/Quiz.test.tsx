@@ -1,5 +1,5 @@
 /** @jest-environment jsdom */
-import { beforeEach, expect } from 'vitest';
+import { expect } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import { Quiz } from '../Quiz.tsx';
 import * as BackendApi from '../../api/backendApi.ts';
@@ -59,8 +59,8 @@ describe('Quiz', () => {
         await userEvent.click(screen.getByRole('button', { name: 'Next' }));
     };
 
-    beforeEach(async () => {
-        axiosGetSpy.mockResolvedValue(mockSubjects);
+    const renderQuiz = async (subjects: { data: WaniKaniSubject[] }) => {
+        axiosGetSpy.mockResolvedValue(subjects);
         await waitFor(() => {
             render(
                 <Quiz
@@ -70,16 +70,18 @@ describe('Quiz', () => {
                 />,
             );
         });
-        await screen.findByText('人工');
-    });
+        await screen.findByText('Check Answer');
+    };
 
     it('looks up assignment subjects in the database on page load', async () => {
+        await renderQuiz(mockSubjects);
         expect(loadSubjectsSpy).toHaveBeenCalledOnce();
         expect(loadSubjectsSpy).toHaveBeenCalledWith(mockQuizItems);
         expect(axiosGetSpy).toHaveBeenCalledWith(`http://localhost:3001/loadFromDatabase?subject_ids=1,2,3`);
     });
 
     it('does not proceed with an incorrect answer', async () => {
+        await renderQuiz(mockSubjects);
         const textbox = screen.getByRole('textbox');
         await userEvent.type(textbox, 'asdf');
         await userEvent.click(screen.getByRole('button', { name: 'Check Answer' }));
@@ -89,6 +91,7 @@ describe('Quiz', () => {
     });
 
     it('cycles through the quiz with correct answers', async () => {
+        await renderQuiz(mockSubjects);
         await submitAnswerAndContinue('jinkou');
         await submitAnswerAndContinue('construction');
         expect(screen.queryByText('人工')).toBeNull();
@@ -98,4 +101,23 @@ describe('Quiz', () => {
         await submitAnswerAndContinue('great');
         expect(await screen.findByText('Quiz Finished!')).toBeVisible();
     });
+
+    it('only shows meaning questions for radicals', async () => {
+        await renderQuiz({ data: [
+            {
+                data: {
+                    characters: '罒',
+                    readings: [],
+                    meanings: [
+                        {
+                            meaning: 'net'
+                        }
+                    ]
+                },
+                object: 'radical',
+            },
+        ]});
+        await submitAnswerAndContinue('net');
+        expect(await screen.findByText('Quiz Finished!')).toBeVisible();
+    })
 });
