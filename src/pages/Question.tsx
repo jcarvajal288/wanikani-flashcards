@@ -130,7 +130,8 @@ export const Question = (props: QuestionParams) => {
                         bgcolor: determineInputColor(),
                         input: {
                             color: determineTextColor(),
-                            textAlign: 'center'
+                            textAlign: 'center',
+                            fontSize: 20
                         },
                     }}
                 />
