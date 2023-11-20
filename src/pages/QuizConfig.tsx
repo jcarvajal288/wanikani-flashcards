@@ -98,7 +98,12 @@ export const QuizConfig = (props: QuizConfigParams) => {
                                 variant='outlined'
                                 onChange={(e) => setFormValue({ apiKey: e.target.value })}
                             />
-                            <Stack direction='row'>
+                            <Stack
+                                direction='row'
+                                justifyContent='space-evenly'
+                                margin='16px'
+                                gap='16px'
+                            >
                                 <SubjectSelectors
                                     toggleRadical={(e) => setSubjectType({ radical: e.target.checked })}
                                     toggleKanji={(e) => setSubjectType({ kanji: e.target.checked })}

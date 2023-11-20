@@ -15,7 +15,10 @@ interface ItemTypesParams {
 
 export const SubjectSelectors = (props: ItemTypesParams) => (
     <Paper>
-        <Stack direction='column'>
+        <Stack
+            padding='16px'
+            direction='column'
+        >
             <Typography variant='h5'>Item Types</Typography>
             <FormGroup>
                 <FormControlLabel

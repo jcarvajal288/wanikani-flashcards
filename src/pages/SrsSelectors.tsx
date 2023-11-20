@@ -27,7 +27,10 @@ interface SrsSelectorsParams {
 
 export const SrsSelectors = (props: SrsSelectorsParams) => (
     <Paper>
-        <Stack direction='column'>
+        <Stack
+            padding='16px'
+            direction='column'
+        >
             <Typography variant='h5'>SRS Levels</Typography>
             <FormGroup>
                 <Stack direction='row'>
