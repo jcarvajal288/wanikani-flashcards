@@ -12,12 +12,12 @@ type SubjectReading = {
 
 type SubjectMeaning = {
     meaning: string;
-}
+};
 
 export type WaniKaniSubject = {
     data: {
         characters: string;
-        readings: SubjectReading[];
+        readings?: SubjectReading[];
         meanings: SubjectMeaning[];
     };
     object: 'radical' | 'kanji' | 'vocabulary' | 'kana_vocabulary';
@@ -25,5 +25,5 @@ export type WaniKaniSubject = {
 
 export type QuizQuestion = {
     subject: WaniKaniSubject;
-    type: 'reading' | 'meaning'
-}
+    type: 'reading' | 'meaning';
+};

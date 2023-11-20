@@ -5,7 +5,7 @@ import { Quiz } from '../Quiz.tsx';
 import * as BackendApi from '../../api/backendApi.ts';
 import axios from 'axios';
 import { userEvent } from '@testing-library/user-event';
-import {WaniKaniSubject} from "../../types.ts";
+import { WaniKaniSubject } from '../../types.ts';
 
 vitest.mock('axios');
 vitest.mock('../backendApi.ts');
@@ -28,8 +28,8 @@ describe('Quiz', () => {
                     meanings: [
                         {
                             meaning: 'construction',
-                        }
-                    ]
+                        },
+                    ],
                 },
                 object: 'vocabulary',
             },
@@ -44,8 +44,8 @@ describe('Quiz', () => {
                     meanings: [
                         {
                             meaning: 'great',
-                        }
-                    ]
+                        },
+                    ],
                 },
                 object: 'vocabulary',
             },
@@ -85,8 +85,8 @@ describe('Quiz', () => {
         const textbox = screen.getByRole('textbox');
         await userEvent.type(textbox, 'asdf');
         await userEvent.click(screen.getByRole('button', { name: 'Check Answer' }));
-        expect(screen.queryByRole('button', { name: 'Check Answer'})).toBeNull();
-        expect(screen.getByRole('button', { name: 'Retry'})).toBeVisible();
+        expect(screen.queryByRole('button', { name: 'Check Answer' })).toBeNull();
+        expect(screen.getByRole('button', { name: 'Retry' })).toBeVisible();
         expect(screen.queryByText('大した')).toBeNull();
     });
 
@@ -103,21 +103,22 @@ describe('Quiz', () => {
     });
 
     it('only shows meaning questions for radicals', async () => {
-        await renderQuiz({ data: [
-            {
-                data: {
-                    characters: '罒',
-                    readings: [],
-                    meanings: [
-                        {
-                            meaning: 'net'
-                        }
-                    ]
+        await renderQuiz({
+            data: [
+                {
+                    data: {
+                        characters: '罒',
+                        meanings: [
+                            {
+                                meaning: 'net',
+                            },
+                        ],
+                    },
+                    object: 'radical',
                 },
-                object: 'radical',
-            },
-        ]});
+            ],
+        });
         await submitAnswerAndContinue('net');
         expect(await screen.findByText('Quiz Finished!')).toBeVisible();
-    })
+    });
 });
