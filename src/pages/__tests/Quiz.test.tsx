@@ -30,6 +30,7 @@ describe('Quiz', () => {
                             meaning: 'construction',
                         },
                     ],
+                    document_url: 'www.test.com'
                 },
                 object: 'vocabulary',
             },
@@ -46,6 +47,7 @@ describe('Quiz', () => {
                             meaning: 'great',
                         },
                     ],
+                    document_url: 'www.test.com'
                 },
                 object: 'vocabulary',
             },
@@ -92,12 +94,16 @@ describe('Quiz', () => {
 
     it('cycles through the quiz with correct answers', async () => {
         await renderQuiz(mockSubjects);
+        expect(screen.getByText('1/4')).toBeVisible()
         await submitAnswerAndContinue('jinkou');
+        expect(screen.getByText('2/4')).toBeVisible()
         await submitAnswerAndContinue('construction');
         expect(screen.queryByText('人工')).toBeNull();
         expect(await screen.findByText('大した')).toBeVisible();
 
+        expect(screen.getByText('3/4')).toBeVisible()
         await submitAnswerAndContinue('taishita');
+        expect(screen.getByText('4/4')).toBeVisible()
         await submitAnswerAndContinue('great');
         expect(await screen.findByText('Quiz Finished!')).toBeVisible();
     });
@@ -113,6 +119,7 @@ describe('Quiz', () => {
                                 meaning: 'net',
                             },
                         ],
+                        document_url: 'www.test.com'
                     },
                     object: 'radical',
                 },

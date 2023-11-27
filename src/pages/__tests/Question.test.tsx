@@ -49,6 +49,8 @@ describe('Question', () => {
                 subject={subject}
                 moveToNextSubject={() => {}}
                 type='reading'
+                numberOfSubjectsCompleted={0}
+                totalSubjects={10}
             />,
         );
     };
@@ -59,6 +61,8 @@ describe('Question', () => {
                 subject={subject}
                 moveToNextSubject={() => {}}
                 type='meaning'
+                numberOfSubjectsCompleted={0}
+                totalSubjects={10}
             />,
         );
     };
@@ -132,5 +136,10 @@ describe('Question', () => {
         const subjectPageButton = screen.getByRole('link', { name: 'Subject Page' });
         expect(subjectPageButton).toHaveAttribute('href', 'https://test.com');
         expect(subjectPageButton).toHaveAttribute('target', '_blank');
+    })
+
+    it('displays the number of subjects completed and total subjects in the quiz', () => {
+        renderReadingQuestion(mockVocabSubject);
+        expect(screen.getByText('1/10')).toBeVisible();
     })
 });

@@ -54,6 +54,8 @@ export const Quiz = (props: QuizParams) => {
                 subject={questions[currentQuestionIndex].subject}
                 moveToNextSubject={() => setCurrentQuestionIndex(currentQuestionIndex + 1)}
                 type={questions[currentQuestionIndex].type}
+                numberOfSubjectsCompleted={currentQuestionIndex}
+                totalSubjects={questions.length}
             />
         );
     }

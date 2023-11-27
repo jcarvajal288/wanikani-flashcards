@@ -15,6 +15,8 @@ interface QuestionParams {
     subject: WaniKaniSubject;
     moveToNextSubject: () => void;
     type: 'reading' | 'meaning';
+    numberOfSubjectsCompleted: number;
+    totalSubjects: number;
 }
 
 export const Question = (props: QuestionParams) => {
@@ -96,6 +98,7 @@ export const Question = (props: QuestionParams) => {
     return (
         <>
             <Stack>
+                <Typography>{`${props.numberOfSubjectsCompleted + 1}/${props.totalSubjects}`}</Typography>
                 <Paper
                     sx={{
                         bgcolor: determineColor(props.subject),
