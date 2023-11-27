@@ -19,6 +19,7 @@ export type WaniKaniSubject = {
         characters: string;
         readings?: SubjectReading[];
         meanings: SubjectMeaning[];
+        document_url: string;
     };
     object: 'radical' | 'kanji' | 'vocabulary' | 'kana_vocabulary';
 };

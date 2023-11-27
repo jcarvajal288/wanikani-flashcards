@@ -18,7 +18,8 @@ describe('Question', () => {
                 {
                     meaning: 'Angle',
                 }
-            ]
+            ],
+            document_url: 'https://test.com'
         },
         object: 'kanji',
     };
@@ -36,7 +37,8 @@ describe('Question', () => {
                 {
                     meaning: 'Construction',
                 }
-            ]
+            ],
+            document_url: 'https://test.com'
         },
         object: 'vocabulary',
     };
@@ -124,4 +126,11 @@ describe('Question', () => {
         expect(screen.getByDisplayValue('じんこう')).toBeVisible();
         expect(screen.queryByDisplayValue('じんこうわ')).toBeNull();
     });
+
+    it('has a Subject Page button that links to the subject\'s WaniKani page', () => {
+        renderReadingQuestion(mockVocabSubject);
+        const subjectPageButton = screen.getByRole('link', { name: 'Subject Page' });
+        expect(subjectPageButton).toHaveAttribute('href', 'https://test.com');
+        expect(subjectPageButton).toHaveAttribute('target', '_blank');
+    })
 });

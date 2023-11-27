@@ -47,7 +47,7 @@ export const Question = (props: QuestionParams) => {
     const checkAnswer = (): void => {
         if (answerCorrectness === null) {
             const acceptedAnswers = props.type === 'reading'
-                ? props.subject.data.readings.map((r) => r.reading)
+                ? props.subject.data.readings!.map((r) => r.reading)
                 : props.subject.data.meanings.map((m) => m.meaning.toLowerCase());
             setAnswerCorrectness(acceptedAnswers.includes(answerInputValue.toLowerCase()));
             return;
@@ -135,7 +135,14 @@ export const Question = (props: QuestionParams) => {
                         },
                     }}
                 />
-                <Button onClick={checkAnswer}>{determineSubmitButtonText()}</Button>
+                <Stack
+                    direction='row'
+                    justifyContent='space-between'
+                >
+                    <Button disabled={true}></Button>
+                    <Button onClick={checkAnswer}>{determineSubmitButtonText()}</Button>
+                    <Button href={props.subject.data.document_url} target='_blank'>Subject Page</Button>
+                </Stack>
             </Stack>
         </>
     );
