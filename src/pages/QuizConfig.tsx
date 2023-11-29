@@ -3,6 +3,7 @@ import { Dispatch, FormEvent, useState } from 'react';
 import { fetchAndPostWaniKaniSubjectData, fetchQuizItems } from '../api/waniKaniApi.ts';
 import { SubjectSelectors, SubjectTypes } from './SubjectSelectors.tsx';
 import { SrsLevels, SrsSelectors } from './SrsSelectors.tsx';
+import {deleteAllSubjects} from "../api/backendApi.ts";
 
 export type QuizConfigFormData = {
     apiKey: string;
@@ -78,6 +79,7 @@ export const QuizConfig = (props: QuizConfigParams) => {
         if (formData.apiKey === '') {
             alert('You must enter your API Key before performing this action.');
         } else {
+            await deleteAllSubjects();
             await fetchAndPostWaniKaniSubjectData(formData.apiKey);
         }
     };

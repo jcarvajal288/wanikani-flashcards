@@ -1,0 +1,9 @@
+node_modules
+backend
+npm-debug.log
+Dockerfile
+.dockerignore
+.gitignore
+.git
+.idea
+wanikani-flashcards.iml
