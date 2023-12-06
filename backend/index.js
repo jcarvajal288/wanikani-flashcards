@@ -6,11 +6,12 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 
 const PORT = process.env.PORT || 3001;
+const DB_HOST = process.env.DB_HOST || 'localhost';
 
 const app = express();
 const jsonParser = bodyParser.json({ limit: '4mb' });
 
-const databaseUri = 'mongodb://root:example@localhost:27017/?authMechanism=DEFAULT';
+const databaseUri = `mongodb://root:example@${DB_HOST}:27017/?authMechanism=DEFAULT`;
 const databaseClient = new MongoClient(databaseUri);
 
 app.use(cors());

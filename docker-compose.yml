@@ -25,5 +25,7 @@ services:
   backend:
     image: wanikani-flashcards-backend
     restart: always
+    environment:
+      DB_HOST: mongo
     ports:
       - "3001:3001"

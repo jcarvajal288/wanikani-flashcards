@@ -2,7 +2,6 @@ import { JSONValue, WaniKaniSubject } from '../types.ts';
 import axios from 'axios';
 
 const baseUrl = 'http://localhost:3001'
-//const baseUrl = 'http://backend:3001'
 
 export const postSubjects = async (subjects: JSONValue) => {
     await axios.post(`${baseUrl}/fillDatabase`, subjects);
