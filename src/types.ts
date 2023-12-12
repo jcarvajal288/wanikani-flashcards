@@ -1,3 +1,6 @@
+import {SubjectTypes} from "./pages/SubjectSelectors.tsx";
+import {SrsLevels} from "./pages/SrsSelectors.tsx";
+
 export type JSONValue = string | number | boolean | JSONObject | JSONArray;
 
 interface JSONObject {
@@ -27,4 +30,11 @@ export type WaniKaniSubject = {
 export type QuizQuestion = {
     subject: WaniKaniSubject;
     type: 'reading' | 'meaning';
+};
+
+export type QuizConfigFormData = {
+    apiKey: string;
+    percentageCorrectThreshold: number;
+    subjectTypes: SubjectTypes;
+    srsLevels: SrsLevels;
 };

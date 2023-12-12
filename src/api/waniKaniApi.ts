@@ -1,6 +1,6 @@
-import { QuizConfigFormData } from '../pages/QuizConfig.tsx';
 import axios from 'axios';
 import { postSubjects } from './backendApi.ts';
+import {QuizConfigFormData} from "../types.ts";
 
 const waniKaniApiUrl = 'https://api.wanikani.com/v2';
 
@@ -61,4 +61,9 @@ export const fetchAndPostWaniKaniSubjectData = async (apiKey: string): Promise<v
     };
     await fetchAndPost(apiKey, `${waniKaniApiUrl}/subjects`);
 };
+
+export const fetchCriticalConditionItems = async (quizConfig: QuizConfigFormData): Promise<number[]> => {
+    const threshold = quizConfig.percentageCorrectThreshold;
+    return axios.get(`https://api.wanikani.com/v2/review_statistics?percentages_less_than=${threshold}`, buildHeaders(quizConfig))
+}
 

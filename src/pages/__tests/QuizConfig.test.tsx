@@ -3,11 +3,13 @@ import { render, screen } from '@testing-library/react';
 import { QuizConfig } from '../QuizConfig.tsx';
 import { beforeEach, vitest } from 'vitest';
 import * as WaniKaniApi from '../../api/waniKaniApi.ts';
+import * as BackendApi from '../../api/backendApi.ts';
 import { userEvent } from '@testing-library/user-event';
 
 vi.mock('../../api/waniKaniApi.ts');
 
 describe('QuizConfig', () => {
+    const deleteAllSubjectsSpy = vi.spyOn(BackendApi, 'deleteAllSubjects');
     const fetchQuizItemsSpy = vi.spyOn(WaniKaniApi, 'fetchQuizItems');
     const fetchWanikaniSubjectDataSpy = vi.spyOn(WaniKaniApi, 'fetchAndPostWaniKaniSubjectData');
 
@@ -51,9 +53,11 @@ describe('QuizConfig', () => {
     });
 
     it('triggers database refresh when clicking Update Wanikani Data button', async () => {
+        deleteAllSubjectsSpy.mockImplementation(() => Promise.resolve());
         await userEvent.click(screen.getByRole('textbox', { name: 'API Key' }));
         await userEvent.paste('apiKey');
         await userEvent.click(screen.getByRole('button', { name: /Update Wanikani Data/i }));
+        expect(deleteAllSubjectsSpy).toHaveBeenCalled();
         expect(fetchWanikaniSubjectDataSpy).toHaveBeenCalledWith('apiKey');
     });
 
@@ -75,6 +79,7 @@ describe('QuizConfig', () => {
         await userEvent.click(screen.getByRole('button', { name: 'Generate Quiz' }));
         expect(fetchQuizItemsSpy).toBeCalledWith({
             apiKey: 'apiKey',
+            percentageCorrectThreshold: 100,
             subjectTypes: {
                 radical: true,
                 kanji: true,
@@ -104,6 +109,7 @@ describe('QuizConfig', () => {
         await userEvent.click(screen.getByRole('button', { name: 'Generate Quiz' }));
         expect(fetchQuizItemsSpy).toBeCalledWith({
             apiKey: 'apiKey',
+            percentageCorrectThreshold: 100,
             subjectTypes: {
                 radical: true,
                 kanji: false,

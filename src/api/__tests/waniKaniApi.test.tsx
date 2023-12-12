@@ -1,8 +1,8 @@
 import { beforeEach, expect } from 'vitest';
-import { QuizConfigFormData } from '../../pages/QuizConfig.tsx';
-import { fetchAndPostWaniKaniSubjectData, fetchQuizItems } from '../waniKaniApi.ts';
+import {fetchAndPostWaniKaniSubjectData, fetchCriticalConditionItems, fetchQuizItems} from '../waniKaniApi.ts';
 import axios from 'axios';
 import * as BackendApi from '../backendApi.ts';
+import {QuizConfigFormData} from "../../types.ts";
 
 vitest.mock('axios');
 vitest.mock('../backendApi.ts');
@@ -13,6 +13,7 @@ describe('WaniKani API', () => {
 
     const baseQueryConfig: QuizConfigFormData = {
         apiKey: 'apiKey',
+        percentageCorrectThreshold: 100,
         subjectTypes: {
             radical: false,
             kanji: false,
@@ -118,6 +119,18 @@ describe('WaniKani API', () => {
                 headers,
             );
         });
+
+        it('for critical condition items', () => {
+            const quizConfig: QuizConfigFormData = {
+                ...baseQueryConfig,
+                percentageCorrectThreshold: 67
+            };
+            fetchCriticalConditionItems(quizConfig);
+            expect(axiosGetSpy).toHaveBeenCalledWith(
+                'https://api.wanikani.com/v2/review_statistics?percentages_less_than=67',
+                headers,
+            );
+        });
     });
 
     it('can fetch WaniKani subjects and follow the next_url link', async () => {
@@ -157,4 +170,5 @@ describe('WaniKani API', () => {
         });
         expect(await fetchQuizItems(baseQueryConfig)).toEqual([1, 23, 8, 365]);
     });
+
 });

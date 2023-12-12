@@ -1,15 +1,10 @@
-import { Button, Stack, TextField, Typography } from '@mui/material';
-import { Dispatch, FormEvent, useState } from 'react';
-import { fetchAndPostWaniKaniSubjectData, fetchQuizItems } from '../api/waniKaniApi.ts';
-import { SubjectSelectors, SubjectTypes } from './SubjectSelectors.tsx';
-import { SrsLevels, SrsSelectors } from './SrsSelectors.tsx';
+import {Button, Stack, TextField, Typography} from '@mui/material';
+import {Dispatch, FormEvent, useState} from 'react';
+import {fetchAndPostWaniKaniSubjectData, fetchQuizItems} from '../api/waniKaniApi.ts';
+import {SubjectSelectors, SubjectTypes} from './SubjectSelectors.tsx';
+import {SrsLevels, SrsSelectors} from './SrsSelectors.tsx';
 import {deleteAllSubjects} from "../api/backendApi.ts";
-
-export type QuizConfigFormData = {
-    apiKey: string;
-    subjectTypes: SubjectTypes;
-    srsLevels: SrsLevels;
-};
+import {QuizConfigFormData} from "../types.ts";
 
 type QuizConfigParams = {
     setQuizItems: Dispatch<number[]>;
@@ -18,6 +13,7 @@ type QuizConfigParams = {
 export const QuizConfig = (props: QuizConfigParams) => {
     const baseFormState: QuizConfigFormData = {
         apiKey: '',
+        percentageCorrectThreshold: 100,
         subjectTypes: {
             radical: false,
             kanji: false,
