@@ -21,6 +21,13 @@ describe('QuizConfig', () => {
         expect(screen.getByText('Configure Quiz')).toBeVisible();
     });
 
+    it('shows item type selectors', () => {
+        expect(screen.getByText('Item Types'));
+        expect(screen.getByRole('checkbox', { name: 'Radicals' }));
+        expect(screen.getByRole('checkbox', { name: 'Kanji' }));
+        expect(screen.getByRole('checkbox', { name: 'Vocabulary' }));
+    });
+
     it('shows srs selectors', () => {
         expect(screen.getByText('SRS Levels'));
         expect(screen.getByRole('checkbox', { name: 'Apprentice 1' }));
@@ -33,6 +40,11 @@ describe('QuizConfig', () => {
         expect(screen.getByRole('checkbox', { name: 'Enlightened' }));
         expect(screen.getByRole('checkbox', { name: 'Burned' }));
     });
+
+    it('shows critical items selector', () => {
+        expect(screen.getByText('Miscellaneous'))
+        expect(screen.getByRole('checkbox', { name: 'Critical Condition' }));
+    })
 
     it('shows Generate Quiz button', () => {
         expect(screen.getByRole('button', { name: 'Generate Quiz' }));
@@ -76,10 +88,11 @@ describe('QuizConfig', () => {
         await userEvent.click(screen.getByRole('checkbox', { name: 'Master' }));
         await userEvent.click(screen.getByRole('checkbox', { name: 'Enlightened' }));
         await userEvent.click(screen.getByRole('checkbox', { name: 'Burned' }));
+        await userEvent.click(screen.getByRole('checkbox', { name: 'Critical Condition' }));
         await userEvent.click(screen.getByRole('button', { name: 'Generate Quiz' }));
         expect(fetchQuizItemsSpy).toBeCalledWith({
             apiKey: 'apiKey',
-            percentageCorrectThreshold: 100,
+            percentageCorrectThreshold: 67,
             subjectTypes: {
                 radical: true,
                 kanji: true,

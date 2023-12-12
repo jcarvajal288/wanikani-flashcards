@@ -5,6 +5,7 @@ import {SubjectSelectors, SubjectTypes} from './SubjectSelectors.tsx';
 import {SrsLevels, SrsSelectors} from './SrsSelectors.tsx';
 import {deleteAllSubjects} from "../api/backendApi.ts";
 import {QuizConfigFormData} from "../types.ts";
+import {MiscellaneousSelectors} from "./MiscellaneousSelectors.tsx";
 
 type QuizConfigParams = {
     setQuizItems: Dispatch<number[]>;
@@ -60,6 +61,13 @@ export const QuizConfig = (props: QuizConfigParams) => {
             },
         });
     };
+
+    const setPercentageCorrectThreshold = (isCriticalConditionChecked: boolean) => {
+        setFormData({
+            ...formData,
+            percentageCorrectThreshold: isCriticalConditionChecked ? 67 : 100
+        })
+    }
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -118,6 +126,7 @@ export const QuizConfig = (props: QuizConfigParams) => {
                                     toggleEnlightened={(e) => setSrsLevel({ enlightened: e.target.checked })}
                                     toggleBurned={(e) => setSrsLevel({ burned: e.target.checked })}
                                 />
+                                <MiscellaneousSelectors toggleCriticalCondition={(e) => setPercentageCorrectThreshold(e.target.checked)}/>
                             </Stack>
                             <Button
                                 variant='contained'
