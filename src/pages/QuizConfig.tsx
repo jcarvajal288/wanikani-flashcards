@@ -4,7 +4,7 @@ import {fetchAndPostWaniKaniSubjectData, fetchQuizItems} from '../api/waniKaniAp
 import {SubjectSelectors, SubjectTypes} from './SubjectSelectors.tsx';
 import {SrsLevels, SrsSelectors} from './SrsSelectors.tsx';
 import {deleteAllSubjects} from "../api/backendApi.ts";
-import {QuizConfigFormData} from "../types.ts";
+import {CRITICAL_CONDITION_THRESHOLD, QuizConfigFormData} from "../types.ts";
 import {MiscellaneousSelectors} from "./MiscellaneousSelectors.tsx";
 
 type QuizConfigParams = {
@@ -65,7 +65,7 @@ export const QuizConfig = (props: QuizConfigParams) => {
     const setPercentageCorrectThreshold = (isCriticalConditionChecked: boolean) => {
         setFormData({
             ...formData,
-            percentageCorrectThreshold: isCriticalConditionChecked ? 67 : 100
+            percentageCorrectThreshold: isCriticalConditionChecked ? CRITICAL_CONDITION_THRESHOLD : 100
         })
     }
 

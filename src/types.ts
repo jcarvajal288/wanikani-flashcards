@@ -1,6 +1,8 @@
 import {SubjectTypes} from "./pages/SubjectSelectors.tsx";
 import {SrsLevels} from "./pages/SrsSelectors.tsx";
 
+export const CRITICAL_CONDITION_THRESHOLD = 75
+
 export type JSONValue = string | number | boolean | JSONObject | JSONArray;
 
 interface JSONObject {

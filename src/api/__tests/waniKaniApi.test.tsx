@@ -1,8 +1,11 @@
 import { beforeEach, expect } from 'vitest';
-import {fetchAndPostWaniKaniSubjectData, fetchCriticalConditionItems, fetchQuizItems} from '../waniKaniApi.ts';
+import {
+    fetchAndPostWaniKaniSubjectData,
+    fetchQuizItems
+} from '../waniKaniApi.ts';
 import axios from 'axios';
 import * as BackendApi from '../backendApi.ts';
-import {QuizConfigFormData} from "../../types.ts";
+import {CRITICAL_CONDITION_THRESHOLD, QuizConfigFormData} from "../../types.ts";
 
 vitest.mock('axios');
 vitest.mock('../backendApi.ts');
@@ -11,7 +14,7 @@ describe('WaniKani API', () => {
     const postSubjectsSpy = vi.spyOn(BackendApi, 'postSubjects');
     const axiosGetSpy = vi.spyOn(axios, 'get');
 
-    const baseQueryConfig: QuizConfigFormData = {
+    const baseQuizConfig: QuizConfigFormData = {
         apiKey: 'apiKey',
         percentageCorrectThreshold: 100,
         subjectTypes: {
@@ -43,9 +46,9 @@ describe('WaniKani API', () => {
 
         it('for kanji', () => {
             const quizConfig: QuizConfigFormData = {
-                ...baseQueryConfig,
+                ...baseQuizConfig,
                 subjectTypes: {
-                    ...baseQueryConfig.subjectTypes,
+                    ...baseQuizConfig.subjectTypes,
                     kanji: true,
                 },
             };
@@ -58,9 +61,9 @@ describe('WaniKani API', () => {
 
         it('for radicals and vocabulary', () => {
             const quizConfig: QuizConfigFormData = {
-                ...baseQueryConfig,
+                ...baseQuizConfig,
                 subjectTypes: {
-                    ...baseQueryConfig.subjectTypes,
+                    ...baseQuizConfig.subjectTypes,
                     radical: true,
                     vocabulary: true,
                 },
@@ -74,9 +77,9 @@ describe('WaniKani API', () => {
 
         it('for a single SRS level', () => {
             const quizConfig: QuizConfigFormData = {
-                ...baseQueryConfig,
+                ...baseQuizConfig,
                 srsLevels: {
-                    ...baseQueryConfig.srsLevels,
+                    ...baseQuizConfig.srsLevels,
                     apprentice_1: true,
                 },
             };
@@ -86,9 +89,9 @@ describe('WaniKani API', () => {
 
         it('for multiple SRS levels', () => {
             const quizConfig: QuizConfigFormData = {
-                ...baseQueryConfig,
+                ...baseQuizConfig,
                 srsLevels: {
-                    ...baseQueryConfig.srsLevels,
+                    ...baseQuizConfig.srsLevels,
                     apprentice_1: true,
                     apprentice_2: true,
                     guru_1: true,
@@ -103,13 +106,13 @@ describe('WaniKani API', () => {
 
         it('for subjects and srs levels', () => {
             const quizConfig: QuizConfigFormData = {
-                ...baseQueryConfig,
+                ...baseQuizConfig,
                 subjectTypes: {
-                    ...baseQueryConfig.subjectTypes,
+                    ...baseQuizConfig.subjectTypes,
                     kanji: true,
                 },
                 srsLevels: {
-                    ...baseQueryConfig.srsLevels,
+                    ...baseQuizConfig.srsLevels,
                     apprentice_1: true,
                 },
             };
@@ -122,12 +125,12 @@ describe('WaniKani API', () => {
 
         it('for critical condition items', () => {
             const quizConfig: QuizConfigFormData = {
-                ...baseQueryConfig,
-                percentageCorrectThreshold: 67
+                ...baseQuizConfig,
+                percentageCorrectThreshold: CRITICAL_CONDITION_THRESHOLD
             };
-            fetchCriticalConditionItems(quizConfig);
+            fetchQuizItems(quizConfig);
             expect(axiosGetSpy).toHaveBeenCalledWith(
-                'https://api.wanikani.com/v2/review_statistics?percentages_less_than=67',
+                `https://api.wanikani.com/v2/review_statistics?percentages_less_than=${CRITICAL_CONDITION_THRESHOLD}`,
                 headers,
             );
         });
@@ -168,7 +171,63 @@ describe('WaniKani API', () => {
                 ],
             },
         });
-        expect(await fetchQuizItems(baseQueryConfig)).toEqual([1, 23, 8, 365]);
+        expect(await fetchQuizItems(baseQuizConfig)).toEqual([1, 23, 8, 365]);
     });
 
+    it('filter output of fetchQuizItems with Critical Condition items', async () => {
+        axiosGetSpy.mockResolvedValueOnce({ // fetchAssignments get
+            data: {
+                data: [
+                    { data: { subject_id: 1 } },
+                    { data: { subject_id: 2 } },
+                    { data: { subject_id: 3 } },
+                    { data: { subject_id: 4 } },
+                    { data: { subject_id: 5 } },
+                ],
+            },
+        });
+        axiosGetSpy.mockResolvedValueOnce({ // fetchCriticalConditionItems get
+            data: {
+                data: [
+                    { data: { subject_id: 2 } },
+                    { data: { subject_id: 4 } },
+                    { data: { subject_id: 6 } },
+                    { data: { subject_id: 8 } },
+                ],
+            },
+        });
+        const quizConfig = {
+            ...baseQuizConfig,
+            percentageCorrectThreshold: CRITICAL_CONDITION_THRESHOLD
+        }
+        expect(await fetchQuizItems(quizConfig)).toEqual([2, 4]);
+    })
+
+    it('if no critical items are in assignments, return critical items', async () => {
+        // this often happens when only critical items is checked
+        axiosGetSpy.mockResolvedValueOnce({ // fetchAssignments get
+            data: {
+                data: [
+                    { data: { subject_id: 1 } },
+                    { data: { subject_id: 2 } },
+                    { data: { subject_id: 3 } },
+                    { data: { subject_id: 4 } },
+                    { data: { subject_id: 5 } },
+                ],
+            },
+        });
+        axiosGetSpy.mockResolvedValueOnce({ // fetchCriticalConditionItems get
+            data: {
+                data: [
+                    { data: { subject_id: 6 } },
+                    { data: { subject_id: 8 } },
+                ],
+            },
+        });
+        const quizConfig = {
+            ...baseQuizConfig,
+            percentageCorrectThreshold: CRITICAL_CONDITION_THRESHOLD
+        }
+        expect(await fetchQuizItems(quizConfig)).toEqual([6, 8]);
+    })
 });

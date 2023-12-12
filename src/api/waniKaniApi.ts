@@ -37,10 +37,31 @@ const constructQueryString = (qc: QuizConfigFormData): string => {
     return `${waniKaniApiUrl}/assignments?${parameters}`;
 };
 
-export const fetchQuizItems = async (quizConfig: QuizConfigFormData): Promise<number[]> => {
+const fetchAssignments = async (quizConfig: QuizConfigFormData): Promise<number[]> => {
     const queryString = constructQueryString(quizConfig);
     return await axios.get(queryString, buildHeaders(quizConfig)).then((response) => {
         return response.data.data.map((assignment: { data: { subject_id: number } }) => assignment.data.subject_id);
+    });
+}
+
+const fetchCriticalConditionItems = async (quizConfig: QuizConfigFormData): Promise<number[]> => {
+    const threshold = quizConfig.percentageCorrectThreshold;
+    const queryUrl = `https://api.wanikani.com/v2/review_statistics?percentages_less_than=${threshold}`
+    return axios.get(queryUrl, buildHeaders(quizConfig)).then((response) => {
+        return response.data.data.map((assignment: { data: { subject_id: number } }) => assignment.data.subject_id);
+    })
+}
+
+export const fetchQuizItems = async (quizConfig: QuizConfigFormData): Promise<number[]> => {
+    const assignmentsPromise = fetchAssignments(quizConfig);
+    const criticalConditionItemsPromise = quizConfig.percentageCorrectThreshold < 100 ? fetchCriticalConditionItems(quizConfig) : Promise.resolve([]);
+    return await Promise.all([assignmentsPromise, criticalConditionItemsPromise]).then((values) => {
+        const [ assignments, criticalItems ] = values;
+        if (quizConfig.percentageCorrectThreshold === 100) return assignments;
+        else {
+            const filteredQuizItems = criticalItems.filter(assignment => assignments.includes(assignment))
+            return filteredQuizItems.length === 0 ? criticalItems : filteredQuizItems;
+        }
     });
 };
 
@@ -61,9 +82,4 @@ export const fetchAndPostWaniKaniSubjectData = async (apiKey: string): Promise<v
     };
     await fetchAndPost(apiKey, `${waniKaniApiUrl}/subjects`);
 };
-
-export const fetchCriticalConditionItems = async (quizConfig: QuizConfigFormData): Promise<number[]> => {
-    const threshold = quizConfig.percentageCorrectThreshold;
-    return axios.get(`https://api.wanikani.com/v2/review_statistics?percentages_less_than=${threshold}`, buildHeaders(quizConfig))
-}
 

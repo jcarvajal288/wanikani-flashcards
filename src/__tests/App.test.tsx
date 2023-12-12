@@ -19,6 +19,7 @@ describe('App', () => {
             {
                 data: {
                     characters: '出す',
+                    document_url: 'https://test.com',
                     readings: [
                         {
                             reading: 'だす',

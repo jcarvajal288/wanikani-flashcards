@@ -5,6 +5,7 @@ import { beforeEach, vitest } from 'vitest';
 import * as WaniKaniApi from '../../api/waniKaniApi.ts';
 import * as BackendApi from '../../api/backendApi.ts';
 import { userEvent } from '@testing-library/user-event';
+import {CRITICAL_CONDITION_THRESHOLD} from "../../types.ts";
 
 vi.mock('../../api/waniKaniApi.ts');
 
@@ -92,7 +93,7 @@ describe('QuizConfig', () => {
         await userEvent.click(screen.getByRole('button', { name: 'Generate Quiz' }));
         expect(fetchQuizItemsSpy).toBeCalledWith({
             apiKey: 'apiKey',
-            percentageCorrectThreshold: 67,
+            percentageCorrectThreshold: CRITICAL_CONDITION_THRESHOLD,
             subjectTypes: {
                 radical: true,
                 kanji: true,
