@@ -16,3 +16,9 @@ export const loadSubjects = async (subjects: number[]): Promise<WaniKaniSubject[
 export const deleteAllSubjects = async (): Promise<void> => {
     await axios.post(`${baseUrl}/dropDatabase`);
 }
+
+export const getAllSubjects = async (): Promise<WaniKaniSubject[]> => {
+    return await axios
+      .get(`${baseUrl}/allSubjects`)
+      .then((response) => response.data);
+}

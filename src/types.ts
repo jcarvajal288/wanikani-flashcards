@@ -26,6 +26,7 @@ export type WaniKaniSubject = {
         meanings: SubjectMeaning[];
         document_url: string;
     };
+    id: number;
     object: 'radical' | 'kanji' | 'vocabulary' | 'kana_vocabulary';
 };
 

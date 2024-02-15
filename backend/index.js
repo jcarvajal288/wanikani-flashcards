@@ -40,6 +40,14 @@ app.get('/loadFromDatabase', async (request, response) => {
     response.json(subjects);
 });
 
+app.get('/allSubjects', jsonParser, async (request, response) => {
+    console.log('allSubjects')
+    const database = databaseClient.db('wanikani_db');
+    const subjectsTable = database.collection('subjects');
+    const subjects = await subjectsTable.find({}).toArray();
+    response.json(subjects);
+})
+
 app.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`);
 });

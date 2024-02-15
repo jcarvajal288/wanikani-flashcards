@@ -71,6 +71,7 @@ export const QuizConfig = (props: QuizConfigParams) => {
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        //parseKanjiLists();
         if (formData.apiKey === '') {
             alert('You must enter your API Key before performing this action.');
         } else {
@@ -78,6 +79,20 @@ export const QuizConfig = (props: QuizConfigParams) => {
             props.setQuizItems(quizItems);
         }
     };
+
+    // const characterInList = (character: string, kanjiList: string[]): boolean => {
+    //     return kanjiList.includes(character)
+    // }
+    //
+    // const parseKanjiLists = () => {
+    //     getAllSubjects().then((subjects) => {
+    //         const joyo1 = subjects
+    //             .filter((subject) => characterInList(subject.data.characters, kanji.JLPT_N2_KANJI))
+    //             .filter((subject) => subject.object === 'kanji')
+    //             .map((subject) => subject.id);
+    //         console.log(joyo1.join(','));
+    //     })
+    // }
 
     const handleDatabaseRefresh = async () => {
         if (formData.apiKey === '') {
