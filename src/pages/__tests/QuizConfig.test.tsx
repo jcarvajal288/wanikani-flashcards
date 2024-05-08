@@ -1,5 +1,5 @@
 /** @jest-environment jsdom */
-import { render, screen } from '@testing-library/react';
+import {render, screen} from '@testing-library/react';
 import { QuizConfig } from '../QuizConfig.tsx';
 import { beforeEach, vitest } from 'vitest';
 import * as WaniKaniApi from '../../api/waniKaniApi.ts';
@@ -45,6 +45,18 @@ describe('QuizConfig', () => {
     it('shows critical items selector', () => {
         expect(screen.getByText('Miscellaneous'))
         expect(screen.getByRole('checkbox', { name: 'Critical Condition' }));
+    })
+
+    it('shows JLPT options', () => {
+        expect(screen.getByRole('button', { name: 'JLPT5' }));
+    })
+
+    it('allows selecting different JLPT quizzes', async () => {
+        await userEvent.click(screen.getByTestId('jlpt-selector'));
+        expect(await screen.findByRole('button', { name: 'JLPT4'}));
+        expect(await screen.findByRole('button', { name: 'JLPT3'}));
+        expect(await screen.findByRole('button', { name: 'JLPT2'}));
+        expect(await screen.findByRole('button', { name: 'JLPT1'}));
     })
 
     it('shows Generate Quiz button', () => {
