@@ -9,8 +9,10 @@ import {
     Stack,
     Typography
 } from '@mui/material';
-import React, {ChangeEvent, useRef, useState} from 'react';
+import React, {ChangeEvent, Dispatch, useRef, useState} from 'react';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import {loadSubjects} from "../api/backendApi.ts";
+import {JLPT_N5_KANJI_IDS} from "../assets/kanjiLists.tsx";
 
 export type MiscellaneousTypes = {
     criticalCondition: boolean;
@@ -18,6 +20,7 @@ export type MiscellaneousTypes = {
 
 interface ItemTypesParams {
     toggleCriticalCondition: (e: ChangeEvent<HTMLInputElement>) => void;
+    setQuizItems: Dispatch<number[]>;
 }
 
 export const MiscellaneousSelectors = (props: ItemTypesParams) => {
@@ -39,8 +42,8 @@ export const MiscellaneousSelectors = (props: ItemTypesParams) => {
         setJlptOpen(false);
     };
 
-    const handleJLPTClick = () => {
-         console.log(`starting ${selectedJLPT}`);
+    const handleJLPTClick = async () => {
+        props.setQuizItems(JLPT_N5_KANJI_IDS);
     };
 
     return (

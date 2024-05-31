@@ -141,7 +141,10 @@ export const QuizConfig = (props: QuizConfigParams) => {
                                     toggleEnlightened={(e) => setSrsLevel({ enlightened: e.target.checked })}
                                     toggleBurned={(e) => setSrsLevel({ burned: e.target.checked })}
                                 />
-                                <MiscellaneousSelectors toggleCriticalCondition={(e) => setPercentageCorrectThreshold(e.target.checked)}/>
+                                <MiscellaneousSelectors
+                                  toggleCriticalCondition={(e) => setPercentageCorrectThreshold(e.target.checked)}
+                                  setQuizItems={props.setQuizItems}
+                                />
                             </Stack>
                             <Button
                                 variant='contained'

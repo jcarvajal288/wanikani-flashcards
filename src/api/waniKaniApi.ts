@@ -1,6 +1,7 @@
 import axios from 'axios';
-import { postSubjects } from './backendApi.ts';
-import {QuizConfigFormData} from "../types.ts";
+import {loadSubjects, postSubjects} from './backendApi.ts';
+import {QuizConfigFormData, WaniKaniSubject} from "../types.ts";
+import {JLPT_N5_KANJI_IDS} from "../assets/kanjiLists.tsx";
 
 const waniKaniApiUrl = 'https://api.wanikani.com/v2';
 
@@ -64,6 +65,10 @@ export const fetchQuizItems = async (quizConfig: QuizConfigFormData): Promise<nu
         }
     });
 };
+
+export const fetchKanjiList = async (_kanjiList: string): Promise<WaniKaniSubject[]> => {
+    return loadSubjects(JLPT_N5_KANJI_IDS);
+}
 
 export const fetchAndPostWaniKaniSubjectData = async (apiKey: string): Promise<void> => {
     const fetchAndPost = async (apiKey: string, url: string) => {
