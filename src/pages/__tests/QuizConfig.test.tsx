@@ -6,7 +6,7 @@ import * as WaniKaniApi from '../../api/waniKaniApi.ts';
 import * as BackendApi from '../../api/backendApi.ts';
 import { userEvent } from '@testing-library/user-event';
 import {CRITICAL_CONDITION_THRESHOLD} from "../../types.ts";
-import {JLPT_N5_KANJI_IDS} from "../../assets/kanjiLists.tsx";
+import {JLPT_N1_KANJI_IDS, JLPT_N2_KANJI_IDS, JLPT_N3_KANJI_IDS, JLPT_N4_KANJI_IDS, JLPT_N5_KANJI_IDS} from "../../assets/kanjiLists.tsx";
 
 vi.mock('../../api/waniKaniApi.ts');
 
@@ -48,19 +48,6 @@ describe('QuizConfig', () => {
         expect(screen.getByText('Miscellaneous'))
         expect(screen.getByRole('checkbox', { name: 'Critical Condition' }));
     })
-
-    it('allows selecting different JLPT quizzes', async () => {
-        expect(screen.getByRole('button', { name: 'JLPT5' })).toBeVisible();
-        await userEvent.click(screen.getByTestId('jlpt-selector'));
-        expect(await screen.findByRole('menuitem', { name: 'JLPT4'})).toBeVisible();
-        expect(await screen.findByRole('menuitem', { name: 'JLPT3'})).toBeVisible();
-        expect(await screen.findByRole('menuitem', { name: 'JLPT2'})).toBeVisible();
-        expect(await screen.findByRole('menuitem', { name: 'JLPT1'})).toBeVisible();
-    })
-
-    it('shows Generate Quiz button', () => {
-        expect(screen.getByRole('button', { name: 'Generate Quiz' }));
-    });
 
     it('alerts the user when they press the Generate Quiz button without inputting their API Key', async () => {
         vitest.spyOn(window, 'alert').mockImplementation(() => {});
@@ -157,5 +144,33 @@ describe('QuizConfig', () => {
     it('creates a JLPT5 quiz when the JLPT5 button is clicked', async () => {
         await userEvent.click(screen.getByRole('button', { name: 'JLPT5' }));
         expect(setQuizItemsSpy).toBeCalledWith(JLPT_N5_KANJI_IDS);
+    })
+
+    it('creates a JLPT4 quiz when the JLPT4 button is clicked', async () => {
+        await userEvent.click(screen.getByTestId('jlpt-selector'));
+        await userEvent.click(screen.getByRole('menuitem', { name: 'JLPT4' }));
+        await userEvent.click(screen.getByRole('button', { name: 'JLPT4' }));
+        expect(setQuizItemsSpy).toBeCalledWith(JLPT_N4_KANJI_IDS);
+    })
+
+    it('creates a JLPT3 quiz when the JLPT3 button is clicked', async () => {
+        await userEvent.click(screen.getByTestId('jlpt-selector'));
+        await userEvent.click(screen.getByRole('menuitem', { name: 'JLPT3' }));
+        await userEvent.click(screen.getByRole('button', { name: 'JLPT3' }));
+        expect(setQuizItemsSpy).toBeCalledWith(JLPT_N3_KANJI_IDS);
+    })
+
+    it('creates a JLPT2 quiz when the JLPT2 button is clicked', async () => {
+        await userEvent.click(screen.getByTestId('jlpt-selector'));
+        await userEvent.click(screen.getByRole('menuitem', { name: 'JLPT2' }));
+        await userEvent.click(screen.getByRole('button', { name: 'JLPT2' }));
+        expect(setQuizItemsSpy).toBeCalledWith(JLPT_N2_KANJI_IDS);
+    })
+
+    it('creates a JLPT1 quiz when the JLPT1 button is clicked', async () => {
+        await userEvent.click(screen.getByTestId('jlpt-selector'));
+        await userEvent.click(screen.getByRole('menuitem', { name: 'JLPT1' }));
+        await userEvent.click(screen.getByRole('button', { name: 'JLPT1' }));
+        expect(setQuizItemsSpy).toBeCalledWith(JLPT_N1_KANJI_IDS);
     })
 });

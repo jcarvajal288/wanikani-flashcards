@@ -11,12 +11,7 @@ import {
 } from '@mui/material';
 import React, {ChangeEvent, Dispatch, useRef, useState} from 'react';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import {loadSubjects} from "../api/backendApi.ts";
-import {JLPT_N5_KANJI_IDS} from "../assets/kanjiLists.tsx";
-
-export type MiscellaneousTypes = {
-    criticalCondition: boolean;
-};
+import {JLPT_N1_KANJI_IDS, JLPT_N2_KANJI_IDS, JLPT_N3_KANJI_IDS, JLPT_N4_KANJI_IDS, JLPT_N5_KANJI_IDS} from "../assets/kanjiLists.tsx";
 
 interface ItemTypesParams {
     toggleCriticalCondition: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -43,7 +38,23 @@ export const MiscellaneousSelectors = (props: ItemTypesParams) => {
     };
 
     const handleJLPTClick = async () => {
-        props.setQuizItems(JLPT_N5_KANJI_IDS);
+        switch(jlptOptions[selectedJLPT]) {
+            case 'JLPT5':
+                props.setQuizItems(JLPT_N5_KANJI_IDS);
+                break;
+            case 'JLPT4':
+                props.setQuizItems(JLPT_N4_KANJI_IDS);
+                break;
+            case 'JLPT3':
+                props.setQuizItems(JLPT_N3_KANJI_IDS);
+                break;
+            case 'JLPT2':
+                props.setQuizItems(JLPT_N2_KANJI_IDS);
+                break;
+            case 'JLPT1':
+                props.setQuizItems(JLPT_N1_KANJI_IDS);
+                break;
+        }
     };
 
     return (
