@@ -39,7 +39,7 @@ export const KanjiListSelector = (props: KanjiListSelectorProps) => {
         <Button fullWidth onClick={handleSubmit}>{props.options[selectedOption]}</Button>
         <Button
           size='small'
-          data-testid='jlpt-selector'
+          data-testid={`${props.options[0].slice(0, 4).toLowerCase()}-selector`}
           aria-controls={dropdownOpen ? 'split-button-menu' : undefined}
           aria-expanded={dropdownOpen ? 'true' : undefined}
           aria-label="select merge strategy"

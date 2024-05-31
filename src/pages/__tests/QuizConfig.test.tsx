@@ -6,7 +6,14 @@ import * as WaniKaniApi from '../../api/waniKaniApi.ts';
 import * as BackendApi from '../../api/backendApi.ts';
 import { userEvent } from '@testing-library/user-event';
 import {CRITICAL_CONDITION_THRESHOLD} from "../../types.ts";
-import {JLPT_N1_KANJI_IDS, JLPT_N2_KANJI_IDS, JLPT_N3_KANJI_IDS, JLPT_N4_KANJI_IDS, JLPT_N5_KANJI_IDS} from "../../assets/kanjiLists.tsx";
+import {
+  JLPT_N1_KANJI_IDS,
+  JLPT_N2_KANJI_IDS,
+  JLPT_N3_KANJI_IDS,
+  JLPT_N4_KANJI_IDS,
+  JLPT_N5_KANJI_IDS,
+  JOYO_KANJI_GRADE_1_IDS, JOYO_KANJI_GRADE_2_IDS, JOYO_KANJI_GRADE_3_IDS, JOYO_KANJI_GRADE_4_IDS, JOYO_KANJI_GRADE_5_IDS
+} from "../../assets/kanjiLists.tsx";
 
 vi.mock('../../api/waniKaniApi.ts');
 
@@ -141,36 +148,73 @@ describe('QuizConfig', () => {
         });
     });
 
-    it('creates a JLPT5 quiz when the JLPT5 button is clicked', async () => {
-        await userEvent.click(screen.getByRole('button', { name: 'JLPT5' }));
-        expect(setQuizItemsSpy).toBeCalledWith(JLPT_N5_KANJI_IDS);
+    describe('JLPT Selector', () => {
+        it('creates a JLPT5 quiz when the JLPT5 button is clicked', async () => {
+            await userEvent.click(screen.getByRole('button', { name: 'JLPT5' }));
+            expect(setQuizItemsSpy).toBeCalledWith(JLPT_N5_KANJI_IDS);
+        })
+
+        it('creates a JLPT4 quiz when the JLPT4 button is clicked', async () => {
+            await userEvent.click(screen.getByTestId('jlpt-selector'));
+            await userEvent.click(screen.getByRole('menuitem', { name: 'JLPT4' }));
+            await userEvent.click(screen.getByRole('button', { name: 'JLPT4' }));
+            expect(setQuizItemsSpy).toBeCalledWith(JLPT_N4_KANJI_IDS);
+        })
+
+        it('creates a JLPT3 quiz when the JLPT3 button is clicked', async () => {
+            await userEvent.click(screen.getByTestId('jlpt-selector'));
+            await userEvent.click(screen.getByRole('menuitem', { name: 'JLPT3' }));
+            await userEvent.click(screen.getByRole('button', { name: 'JLPT3' }));
+            expect(setQuizItemsSpy).toBeCalledWith(JLPT_N3_KANJI_IDS);
+        })
+
+        it('creates a JLPT2 quiz when the JLPT2 button is clicked', async () => {
+            await userEvent.click(screen.getByTestId('jlpt-selector'));
+            await userEvent.click(screen.getByRole('menuitem', { name: 'JLPT2' }));
+            await userEvent.click(screen.getByRole('button', { name: 'JLPT2' }));
+            expect(setQuizItemsSpy).toBeCalledWith(JLPT_N2_KANJI_IDS);
+        })
+
+        it('creates a JLPT1 quiz when the JLPT1 button is clicked', async () => {
+            await userEvent.click(screen.getByTestId('jlpt-selector'));
+            await userEvent.click(screen.getByRole('menuitem', { name: 'JLPT1' }));
+            await userEvent.click(screen.getByRole('button', { name: 'JLPT1' }));
+            expect(setQuizItemsSpy).toBeCalledWith(JLPT_N1_KANJI_IDS);
+        })
     })
 
-    it('creates a JLPT4 quiz when the JLPT4 button is clicked', async () => {
-        await userEvent.click(screen.getByTestId('jlpt-selector'));
-        await userEvent.click(screen.getByRole('menuitem', { name: 'JLPT4' }));
-        await userEvent.click(screen.getByRole('button', { name: 'JLPT4' }));
-        expect(setQuizItemsSpy).toBeCalledWith(JLPT_N4_KANJI_IDS);
-    })
+    describe('JOYO Selector', () => {
+        it('creates a JOYO1 quiz when the JOYO1 button is clicked', async () => {
+            await userEvent.click(screen.getByRole('button', { name: 'JOYO1' }));
+            expect(setQuizItemsSpy).toBeCalledWith(JOYO_KANJI_GRADE_1_IDS);
+        })
 
-    it('creates a JLPT3 quiz when the JLPT3 button is clicked', async () => {
-        await userEvent.click(screen.getByTestId('jlpt-selector'));
-        await userEvent.click(screen.getByRole('menuitem', { name: 'JLPT3' }));
-        await userEvent.click(screen.getByRole('button', { name: 'JLPT3' }));
-        expect(setQuizItemsSpy).toBeCalledWith(JLPT_N3_KANJI_IDS);
-    })
+        it('creates a JOYO2 quiz when the JOYO2 button is clicked', async () => {
+            await userEvent.click(screen.getByTestId('joyo-selector'));
+            await userEvent.click(screen.getByRole('menuitem', { name: 'JOYO2' }));
+            await userEvent.click(screen.getByRole('button', { name: 'JOYO2' }));
+            expect(setQuizItemsSpy).toBeCalledWith(JOYO_KANJI_GRADE_2_IDS);
+        })
 
-    it('creates a JLPT2 quiz when the JLPT2 button is clicked', async () => {
-        await userEvent.click(screen.getByTestId('jlpt-selector'));
-        await userEvent.click(screen.getByRole('menuitem', { name: 'JLPT2' }));
-        await userEvent.click(screen.getByRole('button', { name: 'JLPT2' }));
-        expect(setQuizItemsSpy).toBeCalledWith(JLPT_N2_KANJI_IDS);
-    })
+        it('creates a JOYO3 quiz when the JOYO3 button is clicked', async () => {
+            await userEvent.click(screen.getByTestId('joyo-selector'));
+            await userEvent.click(screen.getByRole('menuitem', { name: 'JOYO3' }));
+            await userEvent.click(screen.getByRole('button', { name: 'JOYO3' }));
+            expect(setQuizItemsSpy).toBeCalledWith(JOYO_KANJI_GRADE_3_IDS);
+        })
 
-    it('creates a JLPT1 quiz when the JLPT1 button is clicked', async () => {
-        await userEvent.click(screen.getByTestId('jlpt-selector'));
-        await userEvent.click(screen.getByRole('menuitem', { name: 'JLPT1' }));
-        await userEvent.click(screen.getByRole('button', { name: 'JLPT1' }));
-        expect(setQuizItemsSpy).toBeCalledWith(JLPT_N1_KANJI_IDS);
+        it('creates a JOYO4 quiz when the JOYO4 button is clicked', async () => {
+            await userEvent.click(screen.getByTestId('joyo-selector'));
+            await userEvent.click(screen.getByRole('menuitem', { name: 'JOYO4' }));
+            await userEvent.click(screen.getByRole('button', { name: 'JOYO4' }));
+            expect(setQuizItemsSpy).toBeCalledWith(JOYO_KANJI_GRADE_4_IDS);
+        })
+
+        it('creates a JOYO5 quiz when the JOYO5 button is clicked', async () => {
+            await userEvent.click(screen.getByTestId('joyo-selector'));
+            await userEvent.click(screen.getByRole('menuitem', { name: 'JOYO5' }));
+            await userEvent.click(screen.getByRole('button', { name: 'JOYO5' }));
+            expect(setQuizItemsSpy).toBeCalledWith(JOYO_KANJI_GRADE_5_IDS);
+        })
     })
 });
