@@ -12,19 +12,19 @@ const correctColor = '#88CC00';
 const halfCorrectColor = '#FFD700';
 const incorrectColor = '#FF0033';
 
-interface QuestionParams {
+type AnswerCorrectness = 'correct' | 'incorrect' | 'half-correct'
+
+type SubjectAnswer = {
+    answer: string;
+    primary: boolean;
+}
+
+type QuestionParams = {
     subject: WaniKaniSubject;
     moveToNextSubject: () => void;
     type: 'reading' | 'meaning';
     numberOfSubjectsCompleted: number;
     totalSubjects: number;
-}
-
-type AnswerCorrectness = "correct" | "incorrect" | "half-correct"
-
-type SubjectAnswer = {
-    answer: string;
-    primary: boolean;
 }
 
 export const Question = (props: QuestionParams) => {
@@ -43,7 +43,7 @@ export const Question = (props: QuestionParams) => {
         }
     }, [props.type]);
 
-    const determineColor = (waniKaniSubject: WaniKaniSubject): string => {
+    const determineSubjectColor = (waniKaniSubject: WaniKaniSubject): string => {
         switch (waniKaniSubject.object) {
             case 'radical':
                 return radicalColor;
@@ -112,9 +112,12 @@ export const Question = (props: QuestionParams) => {
     };
 
     const determineSubmitButtonText = () => {
-        if (answerCorrectness === 'correct') return 'Next';
-        else if (answerCorrectness === 'half-correct' || answerCorrectness === 'incorrect') return 'Retry';
-        else return 'Check Answer';
+        if (answerCorrectness === 'correct')
+            return 'Next';
+        else if (answerCorrectness === 'half-correct' || answerCorrectness === 'incorrect')
+            return 'Retry';
+        else
+            return 'Check Answer';
     }
 
     return (
@@ -123,7 +126,7 @@ export const Question = (props: QuestionParams) => {
                 <Typography>{`${props.numberOfSubjectsCompleted + 1}/${props.totalSubjects}`}</Typography>
                 <Paper
                     sx={{
-                        bgcolor: determineColor(props.subject),
+                        bgcolor: determineSubjectColor(props.subject),
                         color: '#FFFFFF',
                     }}
                 >
