@@ -23,6 +23,7 @@ describe('App', () => {
                     readings: [
                         {
                             reading: 'だす',
+                            primary: true
                         },
                     ],
                     meanings: [
@@ -31,6 +32,7 @@ describe('App', () => {
                         }
                     ]
                 },
+                id: 1,
                 object: 'vocabulary',
             },
         ]);

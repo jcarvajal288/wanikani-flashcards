@@ -23,6 +23,7 @@ describe('Quiz', () => {
                     readings: [
                         {
                             reading: 'じんこう',
+                            primary: true
                         },
                     ],
                     meanings: [
@@ -32,6 +33,7 @@ describe('Quiz', () => {
                     ],
                     document_url: 'www.test.com'
                 },
+                id: 1,
                 object: 'vocabulary',
             },
             {
@@ -40,6 +42,7 @@ describe('Quiz', () => {
                     readings: [
                         {
                             reading: 'たいした',
+                            primary: true,
                         },
                     ],
                     meanings: [
@@ -49,6 +52,7 @@ describe('Quiz', () => {
                     ],
                     document_url: 'www.test.com'
                 },
+                id: 2,
                 object: 'vocabulary',
             },
         ],
@@ -121,6 +125,7 @@ describe('Quiz', () => {
                         ],
                         document_url: 'www.test.com'
                     },
+                    id: 1,
                     object: 'radical',
                 },
             ],

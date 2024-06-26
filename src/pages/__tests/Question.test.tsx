@@ -12,6 +12,11 @@ describe('Question', () => {
             readings: [
                 {
                     reading: 'かく',
+                    primary: true
+                },
+                {
+                    reading: 'かど',
+                    primary: false
                 },
             ],
             meanings: [
@@ -21,6 +26,7 @@ describe('Question', () => {
             ],
             document_url: 'https://test.com'
         },
+        id: 1,
         object: 'kanji',
     };
 
@@ -30,6 +36,7 @@ describe('Question', () => {
             readings: [
                 {
                     reading: 'じんこう',
+                    primary: true
                 },
 
             ],
@@ -40,6 +47,7 @@ describe('Question', () => {
             ],
             document_url: 'https://test.com'
         },
+        id: 2,
         object: 'vocabulary',
     };
 
@@ -96,10 +104,16 @@ describe('Question', () => {
             expect(screen.getByDisplayValue('じんこう')).toBeVisible();
         });
 
-        it('evaluates a reading submission', async () => {
+        it('evaluates a primary reading submission', async () => {
             renderReadingQuestion(mockVocabSubject);
             await submitAnswer('jinnkou')
             expect(screen.getByText('Next')).toBeVisible();
+        })
+
+        it('evaluates a non-primary reading submission', async () => {
+            renderReadingQuestion(mockKanjiSubject);
+            await submitAnswer('kado')
+            expect(screen.getByText('Retry')).toBeVisible();
         })
     });
 

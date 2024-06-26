@@ -13,6 +13,7 @@ interface JSONArray extends Array<JSONValue> {}
 
 type SubjectReading = {
     reading: string;
+    primary: boolean;
 };
 
 type SubjectMeaning = {

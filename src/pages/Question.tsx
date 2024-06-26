@@ -1,4 +1,4 @@
-import { WaniKaniSubject } from '../types.ts';
+import {WaniKaniSubject} from '../types.ts';
 import { Button, Paper, Stack, TextField, Typography } from '@mui/material';
 import {bind, unbind} from 'wanakana';
 import {ChangeEvent, KeyboardEvent, useEffect, useRef, useState} from 'react';
@@ -9,6 +9,7 @@ const kanjiColor = '#FF00AA';
 const vocabColor = '#AA00FF';
 
 const correctColor = '#88CC00';
+const halfCorrectColor = '#FFD700';
 const incorrectColor = '#FF0033';
 
 interface QuestionParams {
@@ -19,9 +20,16 @@ interface QuestionParams {
     totalSubjects: number;
 }
 
+type AnswerCorrectness = "correct" | "incorrect" | "half-correct"
+
+type SubjectAnswer = {
+    answer: string;
+    primary: boolean;
+}
+
 export const Question = (props: QuestionParams) => {
     const [answerInputValue, setAnswerInputValue] = useState<string>('');
-    const [answerCorrectness, setAnswerCorrectness] = useState<boolean | null>(null);
+    const [answerCorrectness, setAnswerCorrectness] = useState<AnswerCorrectness | null>(null);
     const answerInputRef = useRef(null);
     const [isRefBound, setIsRefBound] = useState<boolean>(false);
 
@@ -48,13 +56,25 @@ export const Question = (props: QuestionParams) => {
 
     const checkAnswer = (): void => {
         if (answerCorrectness === null) {
-            const acceptedAnswers = props.type === 'reading'
-                ? props.subject.data.readings!.map((r) => r.reading)
-                : props.subject.data.meanings.map((m) => m.meaning.toLowerCase());
-            setAnswerCorrectness(acceptedAnswers.includes(answerInputValue.toLowerCase()));
+            const acceptedAnswers: SubjectAnswer[] = props.type === 'reading'
+                ? props.subject.data.readings!.map((r): SubjectAnswer => ({
+                      answer: r.reading,
+                      primary: r.primary
+                  }))
+                : props.subject.data.meanings.map((m): SubjectAnswer => ({
+                      answer: m.meaning.toLowerCase(),
+                      primary: true
+                  }));
+            const answer = acceptedAnswers.find(a => a.answer === answerInputValue.toLowerCase());
+            if (answer) {
+                if (answer.primary) setAnswerCorrectness('correct');
+                else setAnswerCorrectness('half-correct')
+            } else {
+                setAnswerCorrectness('incorrect');
+            }
             return;
         }
-        if (answerCorrectness) {
+        if (answerCorrectness === 'correct') {
             props.moveToNextSubject();
         }
         setAnswerCorrectness(null);
@@ -71,13 +91,15 @@ export const Question = (props: QuestionParams) => {
     };
 
     const determineInputColor = () => {
-        if (answerCorrectness === true) return correctColor;
-        else if (answerCorrectness === false) return incorrectColor;
+        if (answerCorrectness === 'correct') return correctColor;
+        else if (answerCorrectness === 'half-correct') return halfCorrectColor;
+        else if (answerCorrectness === 'incorrect') return incorrectColor;
         else return '#FFFFFF';
     };
 
     const determineTextColor = () => {
-        return answerCorrectness === null ? '#000000' : '#FFFFFF';
+        return answerCorrectness === null || answerCorrectness === 'half-correct'
+          ? '#000000' : '#FFFFFF';
     };
 
     const buildTypeHeader = () => {
@@ -90,8 +112,8 @@ export const Question = (props: QuestionParams) => {
     };
 
     const determineSubmitButtonText = () => {
-        if (answerCorrectness === true) return 'Next';
-        else if (answerCorrectness === false) return 'Retry';
+        if (answerCorrectness === 'correct') return 'Next';
+        else if (answerCorrectness === 'half-correct' || answerCorrectness === 'incorrect') return 'Retry';
         else return 'Check Answer';
     }
 
