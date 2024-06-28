@@ -1,5 +1,5 @@
 import {WaniKaniSubject} from '../types.ts';
-import { Button, Paper, Stack, TextField, Typography } from '@mui/material';
+import {Button, Grid, Paper, Stack, TextField, Typography } from '@mui/material';
 import {bind, unbind} from 'wanakana';
 import {ChangeEvent, KeyboardEvent, useEffect, useRef, useState} from 'react';
 import parse from 'html-react-parser';
@@ -163,14 +163,20 @@ export const Question = (props: QuestionParams) => {
                         },
                     }}
                 />
-                <Stack
-                    direction='row'
-                    justifyContent='space-between'
+                <Grid
+                  container
+                  columns={{ xs: 3 }}
                 >
-                    <Button disabled={true}></Button>
-                    <Button onClick={checkAnswer}>{determineSubmitButtonText()}</Button>
-                    <Button href={props.subject.data.document_url} target='_blank'>Subject Page</Button>
-                </Stack>
+                    <Grid item xs={1}></Grid>
+                    <Grid item xs={1}>
+                        <Button onClick={checkAnswer}>{determineSubmitButtonText()}</Button>
+                    </Grid>
+                    <Grid item xs={1}>
+                        <Stack direction='row' justifyContent='flex-end'>
+                            <Button href={props.subject.data.document_url} target='_blank'>Subject Page</Button>
+                        </Stack>
+                    </Grid>
+                </Grid>
             </Stack>
         </>
     );
