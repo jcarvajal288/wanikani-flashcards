@@ -12,19 +12,19 @@ describe('Question', () => {
             readings: [
                 {
                     reading: 'かく',
-                    primary: true
+                    primary: true,
                 },
                 {
                     reading: 'かど',
-                    primary: false
+                    primary: false,
                 },
             ],
             meanings: [
                 {
                     meaning: 'Angle',
-                }
+                },
             ],
-            document_url: 'https://test.com'
+            document_url: 'https://test.com',
         },
         id: 1,
         object: 'kanji',
@@ -36,16 +36,15 @@ describe('Question', () => {
             readings: [
                 {
                     reading: 'じんこう',
-                    primary: true
+                    primary: true,
                 },
-
             ],
             meanings: [
                 {
                     meaning: 'Construction',
-                }
+                },
             ],
-            document_url: 'https://test.com'
+            document_url: 'https://test.com',
         },
         id: 2,
         object: 'vocabulary',
@@ -69,6 +68,18 @@ describe('Question', () => {
                 subject={subject}
                 moveToNextSubject={() => {}}
                 type='meaning'
+                numberOfSubjectsCompleted={0}
+                totalSubjects={10}
+            />,
+        );
+    };
+
+    const renderPronunciationQuestion = (subject: WaniKaniSubject) => {
+        render(
+            <Question
+                subject={subject}
+                moveToNextSubject={() => {}}
+                type='pronunciation'
                 numberOfSubjectsCompleted={0}
                 totalSubjects={10}
             />,
@@ -106,15 +117,15 @@ describe('Question', () => {
 
         it('evaluates a primary reading submission', async () => {
             renderReadingQuestion(mockVocabSubject);
-            await submitAnswer('jinnkou')
+            await submitAnswer('jinnkou');
             expect(screen.getByText('Next')).toBeVisible();
-        })
+        });
 
         it('evaluates a non-primary reading submission', async () => {
             renderReadingQuestion(mockKanjiSubject);
-            await submitAnswer('kado')
+            await submitAnswer('kado');
             expect(screen.getByText('Retry')).toBeVisible();
-        })
+        });
     });
 
     describe('Meaning Questions', () => {
@@ -125,16 +136,36 @@ describe('Question', () => {
 
         it('leaves text typed into the textbox as english', async () => {
             renderMeaningQuestion(mockVocabSubject);
-            await submitAnswer('watashi')
+            await submitAnswer('watashi');
             expect(screen.queryByDisplayValue('わたし')).toBeNull();
             expect(screen.getByDisplayValue('watashi')).toBeVisible();
         });
 
         it('evaluates a meaning submission', async () => {
             renderMeaningQuestion(mockVocabSubject);
-            await submitAnswer('construction')
+            await submitAnswer('construction');
             expect(screen.getByText('Next')).toBeVisible();
-        })
+        });
+    });
+
+    describe('Pronunciation Questions', () => {
+        it("displays the subject's reading", () => {
+            renderPronunciationQuestion(mockVocabSubject);
+            expect(screen.getByText('じんこう')).toBeVisible();
+            expect(screen.getByTestId('type-header').textContent).toEqual('Vocabulary Meaning');
+        });
+
+        it('leaves text typed into the textbox as english', async () => {
+            renderPronunciationQuestion(mockVocabSubject);
+            await submitAnswer('construction');
+            expect(screen.getByDisplayValue('construction')).toBeVisible();
+        });
+
+        it('evaluates a pronunciation submission', async () => {
+            renderPronunciationQuestion(mockVocabSubject);
+            await submitAnswer('construction');
+            expect(screen.getByText('Next')).toBeVisible();
+        });
     });
 
     it('disables answer input after a submission', async () => {
@@ -145,15 +176,15 @@ describe('Question', () => {
         expect(screen.queryByDisplayValue('じんこうわ')).toBeNull();
     });
 
-    it('has a Subject Page button that links to the subject\'s WaniKani page', () => {
+    it("has a Subject Page button that links to the subject's WaniKani page", () => {
         renderReadingQuestion(mockVocabSubject);
         const subjectPageButton = screen.getByRole('link', { name: 'Subject Page' });
         expect(subjectPageButton).toHaveAttribute('href', 'https://test.com');
         expect(subjectPageButton).toHaveAttribute('target', '_blank');
-    })
+    });
 
     it('displays the number of subjects completed and total subjects in the quiz', () => {
         renderReadingQuestion(mockVocabSubject);
         expect(screen.getByText('1/10')).toBeVisible();
-    })
+    });
 });

@@ -23,7 +23,7 @@ describe('Quiz', () => {
                     readings: [
                         {
                             reading: 'じんこう',
-                            primary: true
+                            primary: true,
                         },
                     ],
                     meanings: [
@@ -31,7 +31,7 @@ describe('Quiz', () => {
                             meaning: 'construction',
                         },
                     ],
-                    document_url: 'www.test.com'
+                    document_url: 'www.test.com',
                 },
                 id: 1,
                 object: 'vocabulary',
@@ -50,12 +50,40 @@ describe('Quiz', () => {
                             meaning: 'great',
                         },
                     ],
-                    document_url: 'www.test.com'
+                    document_url: 'www.test.com',
                 },
                 id: 2,
                 object: 'vocabulary',
             },
         ],
+    };
+
+    const mockKanji: WaniKaniSubject = {
+        data: {
+            characters: '大',
+            meanings: [
+                {
+                    meaning: 'big',
+                },
+            ],
+            document_url: 'www.test.com',
+        },
+        id: 1,
+        object: 'kanji',
+    };
+
+    const mockRadical: WaniKaniSubject = {
+        data: {
+            characters: '罒',
+            meanings: [
+                {
+                    meaning: 'net',
+                },
+            ],
+            document_url: 'www.test.com',
+        },
+        id: 1,
+        object: 'radical',
     };
 
     const submitAnswerAndContinue = async (answer: string): Promise<void> => {
@@ -65,7 +93,7 @@ describe('Quiz', () => {
         await userEvent.click(screen.getByRole('button', { name: 'Next' }));
     };
 
-    const renderQuiz = async (subjects: { data: WaniKaniSubject[] }) => {
+    const renderQuiz = async (subjects: { data: WaniKaniSubject[] }, isPronunciationTest = false) => {
         axiosGetSpy.mockResolvedValue(subjects);
         await waitFor(() => {
             render(
@@ -73,6 +101,7 @@ describe('Quiz', () => {
                     quizItems={mockQuizItems}
                     returnHome={() => {}}
                     shuffle={false}
+                    isPronunciationTest={isPronunciationTest}
                 />,
             );
         });
@@ -98,39 +127,42 @@ describe('Quiz', () => {
 
     it('cycles through the quiz with correct answers', async () => {
         await renderQuiz(mockSubjects);
-        expect(screen.getByText('1/4')).toBeVisible()
+        expect(screen.getByText('1/4')).toBeVisible();
         await submitAnswerAndContinue('jinkou');
-        expect(screen.getByText('2/4')).toBeVisible()
+        expect(screen.getByText('2/4')).toBeVisible();
         await submitAnswerAndContinue('construction');
         expect(screen.queryByText('人工')).toBeNull();
         expect(await screen.findByText('大した')).toBeVisible();
 
-        expect(screen.getByText('3/4')).toBeVisible()
+        expect(screen.getByText('3/4')).toBeVisible();
         await submitAnswerAndContinue('taishita');
-        expect(screen.getByText('4/4')).toBeVisible()
+        expect(screen.getByText('4/4')).toBeVisible();
         await submitAnswerAndContinue('great');
         expect(await screen.findByText('Quiz Finished!')).toBeVisible();
     });
 
     it('only shows meaning questions for radicals', async () => {
         await renderQuiz({
-            data: [
-                {
-                    data: {
-                        characters: '罒',
-                        meanings: [
-                            {
-                                meaning: 'net',
-                            },
-                        ],
-                        document_url: 'www.test.com'
-                    },
-                    id: 1,
-                    object: 'radical',
-                },
-            ],
+            data: [mockRadical],
         });
         await submitAnswerAndContinue('net');
+        expect(await screen.findByText('Quiz Finished!')).toBeVisible();
+    });
+
+    it('only shows meaning vocab questions for pronunciation quizzes', async () => {
+        const quizSubjects = {
+            data: [...mockSubjects.data, mockRadical, mockKanji],
+        };
+        await renderQuiz(quizSubjects, true);
+
+        expect(screen.getByText('じんこう')).toBeVisible();
+        expect(screen.queryByText('人工')).not.toBeInTheDocument();
+        await submitAnswerAndContinue('construction');
+
+        expect(screen.getByText('たいした')).toBeVisible();
+        expect(screen.queryByText('大した')).not.toBeInTheDocument();
+        await submitAnswerAndContinue('great');
+
         expect(await screen.findByText('Quiz Finished!')).toBeVisible();
     });
 });

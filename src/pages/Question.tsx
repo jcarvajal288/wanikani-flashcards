@@ -1,7 +1,7 @@
-import {WaniKaniSubject} from '../types.ts';
-import {Button, Grid, Paper, Stack, TextField, Typography } from '@mui/material';
-import {bind, unbind} from 'wanakana';
-import {ChangeEvent, KeyboardEvent, useEffect, useRef, useState} from 'react';
+import { WaniKaniSubject } from '../types.ts';
+import { Button, Grid, Paper, Stack, TextField, Typography } from '@mui/material';
+import { bind, unbind } from 'wanakana';
+import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from 'react';
 import parse from 'html-react-parser';
 
 const radicalColor = '#00AAFF';
@@ -12,20 +12,20 @@ const correctColor = '#88CC00';
 const halfCorrectColor = '#FFD700';
 const incorrectColor = '#FF0033';
 
-type AnswerCorrectness = 'correct' | 'incorrect' | 'half-correct'
+type AnswerCorrectness = 'correct' | 'incorrect' | 'half-correct';
 
 type SubjectAnswer = {
     answer: string;
     primary: boolean;
-}
+};
 
 type QuestionParams = {
     subject: WaniKaniSubject;
     moveToNextSubject: () => void;
-    type: 'reading' | 'meaning';
+    type: 'reading' | 'meaning' | 'pronunciation';
     numberOfSubjectsCompleted: number;
     totalSubjects: number;
-}
+};
 
 export const Question = (props: QuestionParams) => {
     const [answerInputValue, setAnswerInputValue] = useState<string>('');
@@ -56,19 +56,24 @@ export const Question = (props: QuestionParams) => {
 
     const checkAnswer = (): void => {
         if (answerCorrectness === null) {
-            const acceptedAnswers: SubjectAnswer[] = props.type === 'reading'
-                ? props.subject.data.readings!.map((r): SubjectAnswer => ({
-                      answer: r.reading,
-                      primary: r.primary
-                  }))
-                : props.subject.data.meanings.map((m): SubjectAnswer => ({
-                      answer: m.meaning.toLowerCase(),
-                      primary: true
-                  }));
-            const answer = acceptedAnswers.find(a => a.answer === answerInputValue.toLowerCase());
+            const acceptedAnswers: SubjectAnswer[] =
+                props.type === 'reading'
+                    ? props.subject.data.readings!.map(
+                          (r): SubjectAnswer => ({
+                              answer: r.reading,
+                              primary: r.primary,
+                          }),
+                      )
+                    : props.subject.data.meanings.map(
+                          (m): SubjectAnswer => ({
+                              answer: m.meaning.toLowerCase(),
+                              primary: true,
+                          }),
+                      );
+            const answer = acceptedAnswers.find((a) => a.answer === answerInputValue.toLowerCase());
             if (answer) {
                 if (answer.primary) setAnswerCorrectness('correct');
-                else setAnswerCorrectness('half-correct')
+                else setAnswerCorrectness('half-correct');
             } else {
                 setAnswerCorrectness('incorrect');
             }
@@ -98,8 +103,7 @@ export const Question = (props: QuestionParams) => {
     };
 
     const determineTextColor = () => {
-        return answerCorrectness === null || answerCorrectness === 'half-correct'
-          ? '#000000' : '#FFFFFF';
+        return answerCorrectness === null || answerCorrectness === 'half-correct' ? '#000000' : '#FFFFFF';
     };
 
     const buildTypeHeader = () => {
@@ -112,13 +116,14 @@ export const Question = (props: QuestionParams) => {
     };
 
     const determineSubmitButtonText = () => {
-        if (answerCorrectness === 'correct')
-            return 'Next';
-        else if (answerCorrectness === 'half-correct' || answerCorrectness === 'incorrect')
-            return 'Retry';
-        else
-            return 'Check Answer';
-    }
+        if (answerCorrectness === 'correct') return 'Next';
+        else if (answerCorrectness === 'half-correct' || answerCorrectness === 'incorrect') return 'Retry';
+        else return 'Check Answer';
+    };
+
+    const getPrimaryReading = (readings: { reading: string; primary: boolean }[]): string => {
+        return readings.filter((reading) => reading.primary).at(0)!.reading;
+    };
 
     return (
         <>
@@ -135,7 +140,9 @@ export const Question = (props: QuestionParams) => {
                         fontWeight={400}
                         marginTop='20px'
                     >
-                        {props.subject.data.characters}
+                        {props.type === 'pronunciation' && props.subject.data.readings
+                            ? getPrimaryReading(props.subject.data.readings)
+                            : props.subject.data.characters}
                     </Typography>
                 </Paper>
                 <Paper
@@ -159,21 +166,38 @@ export const Question = (props: QuestionParams) => {
                         input: {
                             color: determineTextColor(),
                             textAlign: 'center',
-                            fontSize: 20
+                            fontSize: 20,
                         },
                     }}
                 />
                 <Grid
-                  container
-                  columns={{ xs: 3 }}
+                    container
+                    columns={{ xs: 3 }}
                 >
-                    <Grid item xs={1}></Grid>
-                    <Grid item xs={1}>
+                    <Grid
+                        item
+                        xs={1}
+                    ></Grid>
+                    <Grid
+                        item
+                        xs={1}
+                    >
                         <Button onClick={checkAnswer}>{determineSubmitButtonText()}</Button>
                     </Grid>
-                    <Grid item xs={1}>
-                        <Stack direction='row' justifyContent='flex-end'>
-                            <Button href={props.subject.data.document_url} target='_blank'>Subject Page</Button>
+                    <Grid
+                        item
+                        xs={1}
+                    >
+                        <Stack
+                            direction='row'
+                            justifyContent='flex-end'
+                        >
+                            <Button
+                                href={props.subject.data.document_url}
+                                target='_blank'
+                            >
+                                Subject Page
+                            </Button>
                         </Stack>
                     </Grid>
                 </Grid>

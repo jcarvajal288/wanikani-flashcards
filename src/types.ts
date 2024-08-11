@@ -1,7 +1,7 @@
-import {SubjectTypes} from "./pages/SubjectSelectors.tsx";
-import {SrsLevels} from "./pages/SrsSelectors.tsx";
+import { SubjectTypes } from './pages/SubjectSelectors.tsx';
+import { SrsLevels } from './pages/SrsSelectors.tsx';
 
-export const CRITICAL_CONDITION_THRESHOLD = 75
+export const CRITICAL_CONDITION_THRESHOLD = 75;
 
 export type JSONValue = string | number | boolean | JSONObject | JSONArray;
 
@@ -33,7 +33,7 @@ export type WaniKaniSubject = {
 
 export type QuizQuestion = {
     subject: WaniKaniSubject;
-    type: 'reading' | 'meaning';
+    type: 'reading' | 'meaning' | 'pronunciation';
 };
 
 export type QuizConfigFormData = {

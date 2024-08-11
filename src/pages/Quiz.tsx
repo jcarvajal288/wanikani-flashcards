@@ -25,8 +25,16 @@ export const Quiz = (props: QuizParams) => {
         loadSubjects(props.quizItems).then((fetchedSubjects: WaniKaniSubject[]) => {
             const subjects = props.shuffle ? shuffle(fetchedSubjects) : fetchedSubjects;
             const questions: QuizQuestion[] = subjects
+                .filter(
+                    (subject) =>
+                        !props.isPronunciationTest ||
+                        subject.object === 'vocabulary' ||
+                        subject.object == 'kana_vocabulary',
+                )
                 .map((subject) => {
-                    if (Object.hasOwn(subject.data, 'readings')) {
+                    if (props.isPronunciationTest) {
+                        return [{ subject: subject, type: 'pronunciation' as const }];
+                    } else if (Object.hasOwn(subject.data, 'readings')) {
                         return [
                             { subject: subject, type: 'reading' as const },
                             { subject: subject, type: 'meaning' as const },
