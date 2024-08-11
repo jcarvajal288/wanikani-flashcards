@@ -8,6 +8,7 @@ interface QuizParams {
     quizItems: number[];
     returnHome: () => void;
     shuffle: boolean;
+    isPronunciationTest: boolean;
 }
 
 export const Quiz = (props: QuizParams) => {

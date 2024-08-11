@@ -1,14 +1,15 @@
-import {Button, Stack, TextField, Typography} from '@mui/material';
-import {Dispatch, FormEvent, useState} from 'react';
-import {fetchAndPostWaniKaniSubjectData, fetchQuizItems} from '../api/waniKaniApi.ts';
-import {SubjectSelectors, SubjectTypes} from './SubjectSelectors.tsx';
-import {SrsLevels, SrsSelectors} from './SrsSelectors.tsx';
-import {deleteAllSubjects} from "../api/backendApi.ts";
-import {CRITICAL_CONDITION_THRESHOLD, QuizConfigFormData} from "../types.ts";
-import {MiscellaneousSelectors} from "./MiscellaneousSelectors.tsx";
+import { Button, Stack, TextField, Typography } from '@mui/material';
+import { Dispatch, FormEvent, useState } from 'react';
+import { fetchAndPostWaniKaniSubjectData, fetchQuizItems } from '../api/waniKaniApi.ts';
+import { SubjectSelectors, SubjectTypes } from './SubjectSelectors.tsx';
+import { SrsLevels, SrsSelectors } from './SrsSelectors.tsx';
+import { deleteAllSubjects } from '../api/backendApi.ts';
+import { CRITICAL_CONDITION_THRESHOLD, QuizConfigFormData } from '../types.ts';
+import { MiscellaneousSelectors } from './MiscellaneousSelectors.tsx';
 
 type QuizConfigParams = {
     setQuizItems: Dispatch<number[]>;
+    setIsPronunciationTest: Dispatch<boolean>;
 };
 
 export const QuizConfig = (props: QuizConfigParams) => {
@@ -65,13 +66,12 @@ export const QuizConfig = (props: QuizConfigParams) => {
     const setPercentageCorrectThreshold = (isCriticalConditionChecked: boolean) => {
         setFormData({
             ...formData,
-            percentageCorrectThreshold: isCriticalConditionChecked ? CRITICAL_CONDITION_THRESHOLD : 100
-        })
-    }
+            percentageCorrectThreshold: isCriticalConditionChecked ? CRITICAL_CONDITION_THRESHOLD : 100,
+        });
+    };
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        //parseKanjiLists();
         if (formData.apiKey === '') {
             alert('You must enter your API Key before performing this action.');
         } else {
@@ -79,20 +79,6 @@ export const QuizConfig = (props: QuizConfigParams) => {
             props.setQuizItems(quizItems);
         }
     };
-
-    // const characterInList = (character: string, kanjiList: string[]): boolean => {
-    //     return kanjiList.includes(character)
-    // }
-    //
-    // const parseKanjiLists = () => {
-    //     getAllSubjects().then((subjects) => {
-    //         const joyo1 = subjects
-    //             .filter((subject) => characterInList(subject.data.characters, kanji.JLPT_N2_KANJI))
-    //             .filter((subject) => subject.object === 'kanji')
-    //             .map((subject) => subject.id);
-    //         console.log(joyo1.join(','));
-    //     })
-    // }
 
     const handleDatabaseRefresh = async () => {
         if (formData.apiKey === '') {
@@ -142,8 +128,9 @@ export const QuizConfig = (props: QuizConfigParams) => {
                                     toggleBurned={(e) => setSrsLevel({ burned: e.target.checked })}
                                 />
                                 <MiscellaneousSelectors
-                                  toggleCriticalCondition={(e) => setPercentageCorrectThreshold(e.target.checked)}
-                                  setQuizItems={props.setQuizItems}
+                                    toggleCriticalCondition={(e) => setPercentageCorrectThreshold(e.target.checked)}
+                                    setQuizItems={props.setQuizItems}
+                                    setIsPronunciationTest={props.setIsPronunciationTest}
                                 />
                             </Stack>
                             <Button
