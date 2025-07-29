@@ -22,6 +22,7 @@ type SubjectMeaning = {
 
 export type WaniKaniSubject = {
     data: {
+        level: number;
         characters: string;
         readings?: SubjectReading[];
         meanings: SubjectMeaning[];
@@ -41,4 +42,5 @@ export type QuizConfigFormData = {
     percentageCorrectThreshold: number;
     subjectTypes: SubjectTypes;
     srsLevels: SrsLevels;
+    level: number;
 };

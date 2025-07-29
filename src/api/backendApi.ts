@@ -1,7 +1,7 @@
 import { JSONValue, WaniKaniSubject } from '../types.ts';
 import axios from 'axios';
 
-const baseUrl = 'http://localhost:3001'
+const baseUrl = 'http://localhost:3001';
 
 export const postSubjects = async (subjects: JSONValue) => {
     await axios.post(`${baseUrl}/fillDatabase`, subjects);
@@ -15,10 +15,8 @@ export const loadSubjects = async (subjects: number[]): Promise<WaniKaniSubject[
 
 export const deleteAllSubjects = async (): Promise<void> => {
     await axios.post(`${baseUrl}/dropDatabase`);
-}
+};
 
 export const getAllSubjects = async (): Promise<WaniKaniSubject[]> => {
-    return await axios
-      .get(`${baseUrl}/allSubjects`)
-      .then((response) => response.data);
-}
+    return await axios.get(`${baseUrl}/allSubjects`).then((response) => response.data);
+};

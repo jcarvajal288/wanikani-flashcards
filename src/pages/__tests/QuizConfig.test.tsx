@@ -235,4 +235,11 @@ describe('QuizConfig', () => {
             expect(setQuizItemsSpy).toBeCalledWith(JOYO_KANJI_GRADE_5_IDS);
         });
     });
+
+    describe('Wanikani Level Quiz', () => {
+        it('displays a wanikani level quiz taker', () => {
+            expect(screen.getByRole('spinbutton', { name: 'Wanikani Level' })).toBeVisible();
+            expect(screen.getByRole('button', { name: 'Go' })).toBeVisible();
+        });
+    });
 });

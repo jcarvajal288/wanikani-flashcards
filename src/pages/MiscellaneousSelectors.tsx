@@ -13,6 +13,7 @@ import {
     JOYO_KANJI_GRADE_5_IDS,
 } from '../assets/kanjiLists.tsx';
 import { KanjiListSelector } from './KanjiListSelector.tsx';
+import { WanikaniLevelSelector } from './WanikaniLevelSelector.tsx';
 
 interface ItemTypesParams {
     toggleCriticalCondition: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -26,7 +27,7 @@ export const MiscellaneousSelectors = (props: ItemTypesParams) => {
             <Stack
                 padding='16px'
                 direction='column'
-                spacing={2}
+                spacing={1}
             >
                 <Typography variant='h5'>Miscellaneous</Typography>
                 <FormGroup>
@@ -61,6 +62,7 @@ export const MiscellaneousSelectors = (props: ItemTypesParams) => {
                     ]}
                     setQuizItems={props.setQuizItems}
                 />
+                <WanikaniLevelSelector setQuizItems={props.setQuizItems} />
             </Stack>
         </Paper>
     );
