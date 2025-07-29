@@ -17,11 +17,13 @@ const databaseClient = new MongoClient(databaseUri);
 app.use(cors());
 
 app.post('/dropDatabase', async (request, response) => {
+    console.log('Attemping to drop database...');
     const database = databaseClient.db('wanikani_db');
     const subjectsTable = database.collection('subjects');
     await subjectsTable.drop();
+    console.log('...database dropped');
     response.sendStatus(200);
-})
+});
 
 app.post('/fillDatabase', jsonParser, async (request, response) => {
     const subjects = request.body;
@@ -33,20 +35,22 @@ app.post('/fillDatabase', jsonParser, async (request, response) => {
 });
 
 app.get('/loadFromDatabase', async (request, response) => {
+    console.log('Attempting to fetch from database...');
     const subjectIds = request.query.subject_ids.split(',').map(Number);
     const database = databaseClient.db('wanikani_db');
     const subjectsTable = database.collection('subjects');
     const subjects = await subjectsTable.find({ id: { $in: subjectIds } }).toArray();
+    console.log(`...fetched ${subjects.length} subjects`);
     response.json(subjects);
 });
 
 app.get('/allSubjects', jsonParser, async (request, response) => {
-    console.log('allSubjects')
+    console.log('allSubjects');
     const database = databaseClient.db('wanikani_db');
     const subjectsTable = database.collection('subjects');
     const subjects = await subjectsTable.find({}).toArray();
     response.json(subjects);
-})
+});
 
 app.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`);
