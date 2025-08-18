@@ -239,7 +239,6 @@ describe('QuizConfig', () => {
     describe('Wanikani Level Quiz', () => {
         it('displays a wanikani level quiz taker', () => {
             expect(screen.getByRole('spinbutton', { name: 'Wanikani Level' })).toBeVisible();
-            expect(screen.getByRole('button', { name: 'Go' })).toBeVisible();
         });
     });
 });

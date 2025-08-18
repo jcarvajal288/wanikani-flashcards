@@ -6,6 +6,7 @@ import { SrsLevels, SrsSelectors } from './SrsSelectors.tsx';
 import { deleteAllSubjects } from '../api/backendApi.ts';
 import { CRITICAL_CONDITION_THRESHOLD, QuizConfigFormData } from '../types.ts';
 import { MiscellaneousSelectors } from './MiscellaneousSelectors.tsx';
+import { WANIKANI_LEVELS } from '../assets/wanikaniLevels.tsx';
 
 type QuizConfigParams = {
     setQuizItems: Dispatch<number[]>;
@@ -32,6 +33,7 @@ export const QuizConfig = (props: QuizConfigParams) => {
             enlightened: false,
             burned: false,
         },
+        level: 0,
     };
 
     const [formData, setFormData] = useState<QuizConfigFormData>(baseFormState);
@@ -63,6 +65,13 @@ export const QuizConfig = (props: QuizConfigParams) => {
         });
     };
 
+    const setLevel = (level: number) => {
+        setFormData({
+            ...formData,
+            level,
+        });
+    };
+
     const setPercentageCorrectThreshold = (isCriticalConditionChecked: boolean) => {
         setFormData({
             ...formData,
@@ -76,7 +85,11 @@ export const QuizConfig = (props: QuizConfigParams) => {
             alert('You must enter your API Key before performing this action.');
         } else {
             const quizItems = await fetchQuizItems(formData);
-            props.setQuizItems(quizItems);
+            if (formData.level > 0) {
+                props.setQuizItems(quizItems.filter((item) => WANIKANI_LEVELS[formData.level - 1].includes(item)));
+            } else {
+                props.setQuizItems(quizItems);
+            }
         }
     };
 
@@ -131,6 +144,7 @@ export const QuizConfig = (props: QuizConfigParams) => {
                                     toggleCriticalCondition={(e) => setPercentageCorrectThreshold(e.target.checked)}
                                     setQuizItems={props.setQuizItems}
                                     setIsPronunciationTest={props.setIsPronunciationTest}
+                                    setLevel={setLevel}
                                 />
                             </Stack>
                             <Button

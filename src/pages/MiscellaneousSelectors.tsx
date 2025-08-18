@@ -19,6 +19,7 @@ interface ItemTypesParams {
     toggleCriticalCondition: (e: ChangeEvent<HTMLInputElement>) => void;
     setQuizItems: Dispatch<number[]>;
     setIsPronunciationTest: Dispatch<boolean>;
+    setLevel: (level: number) => void;
 }
 
 export const MiscellaneousSelectors = (props: ItemTypesParams) => {
@@ -62,7 +63,7 @@ export const MiscellaneousSelectors = (props: ItemTypesParams) => {
                     ]}
                     setQuizItems={props.setQuizItems}
                 />
-                <WanikaniLevelSelector setQuizItems={props.setQuizItems} />
+                <WanikaniLevelSelector setLevel={props.setLevel} />
             </Stack>
         </Paper>
     );
